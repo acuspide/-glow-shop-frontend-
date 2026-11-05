@@ -1,3 +1,177 @@
-<h1>bienvenidos a {{ nombreTienda }}</h1>
-<p> tu tienda virtual favorita </p>
-<button>Explorar productos</button>
+
+<main class="inicio">
+
+  <!-- SECCIÓN PRINCIPAL -->
+  <section class="hero">
+
+    <div class="hero-contenido">
+      <span class="etiqueta">TU BELLEZA, TU ESENCIA</span>
+
+      <h1>
+        Descubre una nueva forma de
+        <span>sentirte increíble.</span>
+      </h1>
+
+      <p>
+        Encuentra tus productos favoritos de belleza y cuidado personal.
+        Todo lo que necesitas para resaltar tu esencia está en Glow Shop.
+      </p>
+
+      <a routerLink="/catalogo" class="boton-principal">
+        Explorar productos →
+      </a>
+
+      <div class="hero-detalle">
+        <span>✦ Belleza</span>
+        <span>✦ Cuidado personal</span>
+        <span>✦ Bienestar</span>
+      </div>
+    </div>
+
+    <div class="hero-visual">
+      <div class="circulo-decorativo"></div>
+
+      <div class="tarjeta-producto">
+        <span class="producto-etiqueta">GLOW ESSENTIALS</span>
+        <div class="producto-ilustracion">
+          <div class="frasco">
+            <div class="tapa"></div>
+            <div class="frasco-cuerpo">
+              <span>GLOW</span>
+              <small>SKIN CARE</small>
+            </div>
+          </div>
+          <div class="frasco-secundario">
+            <div class="tapa"></div>
+          </div>
+          <div class="flor">✿</div>
+        </div>
+        <h3>Tu rutina de belleza</h3>
+        <p>Pequeños detalles, grandes cambios.</p>
+      </div>
+
+      <div class="sello">GLOW<br>YOURSELF ✦</div>
+    </div>
+
+  </section>
+
+  <!-- CATEGORÍAS -->
+  <section class="categorias">
+
+    <div class="titulo-seccion">
+      <span>ENCUENTRA LO QUE BUSCAS</span>
+      <h2>Explora nuestras categorías</h2>
+      <p>Todo para cuidar de ti, en un solo lugar.</p>
+    </div>
+
+    <div class="categorias-grid">
+
+      <a routerLink="/catalogo" class="categoria">
+        <div class="categoria-icono facial">✿</div>
+        <h3>Cuidado facial</h3>
+        <p>Cuida y consiente tu piel</p>
+      </a>
+
+      <a routerLink="/catalogo" class="categoria">
+        <div class="categoria-icono maquillaje">♡</div>
+        <h3>Maquillaje</h3>
+        <p>Resalta tu belleza</p>
+      </a>
+
+      <a routerLink="/catalogo" class="categoria">
+        <div class="categoria-icono capilar">❀</div>
+        <h3>Cuidado capilar</h3>
+        <p>Cabello sano y radiante</p>
+      </a>
+
+      <a routerLink="/catalogo" class="categoria">
+        <div class="categoria-icono corporal">✧</div>
+        <h3>Cuidado corporal</h3>
+        <p>Un momento para ti</p>
+      </a>
+
+    </div>
+
+  </section>
+
+  <!-- PRODUCTOS DESTACADOS -->
+  <section class="destacados">
+
+    <div class="titulo-seccion">
+      <span>SELECCIÓN ESPECIAL</span>
+      <h2>Descubre nuestros favoritos</h2>
+      <p>Productos que pueden convertirse en tus nuevos imprescindibles.</p>
+    </div>
+
+    <div class="productos-grid">
+
+      <article class="producto">
+        <div class="producto-imagen producto-rosa">
+          <span>♡</span>
+          <div class="producto-envase">GLOW</div>
+        </div>
+        <div class="producto-info">
+          <small>CUIDADO FACIAL</small>
+          <h3>Esenciales para tu piel</h3>
+          <p>Descubre tu próxima rutina favorita.</p>
+        </div>
+      </article>
+
+      <article class="producto">
+        <div class="producto-imagen producto-lila">
+          <span>♡</span>
+          <div class="producto-envase">BEAUTY</div>
+        </div>
+        <div class="producto-info">
+          <small>MAQUILLAJE</small>
+          <h3>Tu toque de color</h3>
+          <p>Exprésate a través del maquillaje.</p>
+        </div>
+      </article>
+
+      <article class="producto">
+        <div class="producto-imagen producto-beige">
+          <span>♡</span>
+          <div class="producto-envase">PURE</div>
+        </div>
+        <div class="producto-info">
+          <small>CUIDADO PERSONAL</small>
+          <h3>Momentos para ti</h3>
+          <p>Haz de tu cuidado un ritual especial.</p>
+        </div>
+      </article>
+
+    </div>
+
+    <div class="catalogo-boton">
+      <a routerLink="/catalogo" class="boton-secundario">
+        Ver todo el catálogo →
+      </a>
+    </div>
+
+  </section>
+
+  <!-- BENEFICIOS -->
+  <section class="beneficios">
+
+    <div class="beneficio">
+      <span>♡</span>
+      <h3>Variedad</h3>
+      <p>Encuentra diferentes marcas y productos.</p>
+    </div>
+
+    <div class="beneficio">
+      <span>✧</span>
+      <h3>Tu estilo</h3>
+      <p>Opciones para diferentes gustos y necesidades.</p>
+    </div>
+
+    <div class="beneficio">
+      <span>✿</span>
+      <h3>Tu bienestar</h3>
+      <p>Dedica tiempo a cuidar de ti.</p>
+    </div>
+
+  </section>
+
+</main>
