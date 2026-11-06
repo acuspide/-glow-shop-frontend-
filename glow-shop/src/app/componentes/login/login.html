@@ -1,1 +1,121 @@
-<p>login works!</p>
+<section class="login-contenedor">
+
+  <!-- PANEL DE BIENVENIDA (sin cambios) -->
+  <div class="login-bienvenida">
+
+    <span class="bienvenida-etiqueta">WELCOME TO GLOW SHOP</span>
+
+    <h1>
+      Nos alegra
+      <span>tenerte aquí.</span>
+    </h1>
+
+    <p>
+      Tu espacio de belleza y cuidado personal te está esperando.
+      Ingresa a tu cuenta y descubre todo lo que Glow Shop tiene para ti.
+    </p>
+
+    <div class="bienvenida-decoracion">
+      <span>✿</span>
+      <span>GLOW</span>
+      <span>YOURSELF</span>
+    </div>
+
+    <div class="bienvenida-pie">
+      BELLEZA · CUIDADO · BIENESTAR
+    </div>
+
+  </div>
+
+  <!-- PANEL DEL FORMULARIO -->
+  <div class="login-formulario">
+
+    <div class="formulario-contenido">
+
+      <div class="formulario-titulo">
+        <span>BIENVENIDO DE NUEVO</span>
+        <h2>Iniciar sesión</h2>
+        <p>Ingresa tus datos para continuar.</p>
+      </div>
+
+      <!-- CAMBIO 6: avisos -->
+      @if (sesionExpirada) {
+        <div class="alerta alerta-info" role="status">
+          Tu sesión expiró. Vuelve a iniciar sesión para continuar.
+        </div>
+      }
+      @if (error()) {
+        <div class="alerta alerta-error" role="alert">{{ error() }}</div>
+      }
+
+      <!-- CAMBIO 1 -->
+      <form [formGroup]="formulario" (ngSubmit)="enviar()" novalidate>
+
+        <div class="campo">
+          <label for="correo">Correo electrónico</label>
+
+          <!-- CAMBIOS 2 y 4 -->
+          <input
+            type="email"
+            id="correo"
+            formControlName="email"
+            placeholder="ejemplo@correo.com"
+            autocomplete="email"
+          />
+          @if (formulario.controls.email.touched && formulario.controls.email.invalid) {
+            <span class="error-campo">Escribe un correo válido. E identificate care monda</span>
+          }
+        </div>
+
+        <div class="campo">
+          <label for="contrasena">Contraseña</label>
+
+          <!-- CAMBIOS 3 y 4 -->
+          <input
+            [type]="verContrasena() ? 'text' : 'password'"
+            id="contrasena"
+            formControlName="contrasena"
+            placeholder="Ingresa tu contraseña"
+            autocomplete="current-password"
+          />
+          @if (formulario.controls.contrasena.touched && formulario.controls.contrasena.invalid) {
+            <span class="error-campo">Escribe tu contraseña.</span>
+          }
+        </div>
+
+        <div class="opciones-login">
+
+          <label class="recordar">
+            <input type="checkbox" (change)="verContrasena.set(!verContrasena())" />
+            Mostrar contraseña
+          </label>
+
+        </div>
+
+        <!-- CAMBIO 5 -->
+        <button type="submit" class="boton-login" [disabled]="enviando()">
+          {{ enviando() ? 'Ingresando...' : 'Iniciar sesión' }}
+          <span>→</span>
+        </button>
+
+      </form>
+
+      <div class="registro-enlace">
+        ¿Todavía no tienes una cuenta?
+        <a routerLink="/registro">Crear cuenta</a>
+      </div>
+
+      <div class="separador">
+        <span>GLOW SHOP</span>
+      </div>
+
+      <p class="privacidad">
+        Al ingresar, aceptas nuestras políticas de privacidad
+        y condiciones de uso.
+      </p>
+
+    </div>
+
+  </div>
+
+</section>
