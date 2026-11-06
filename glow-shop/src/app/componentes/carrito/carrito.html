@@ -1,1 +1,101 @@
-<p>carrito works!</p>
+<section class="pagina">
+  @if (pedidos(); as confirmados) {
+    <!-- PEDIDO CONFIRMADO -->
+    <div class="exito">
+      <div class="exito-icono">â</div>
+      <h1>¡Gracias por tu compra!</h1>
+      <p class="exito-texto">
+        Tu pedido quedo registrado. Como tus productos pueden venir de varias tiendas, creamos
+        {{ confirmados.length }} {{ confirmados.length === 1 ? 'pedido' : 'pedidos' }}.
+      </p>
+
+      <div class="pedidos">
+        @for (p of confirmados; track p.id) {
+          <div class="pedido">
+            <div>
+              <strong>Pedido #{{ p.id.slice(0, 8) }}</strong>
+              <small>{{ p.detalles.length }} {{ p.detalles.length === 1 ? 'producto' : 'productos' }}</small>
+            </div>
+            <span class="estado-pedido">{{ p.estado }}</span>
+            <strong>{{ p.total | currency: 'COP' : 'symbol-narrow' : '1.0-0' }}</strong>
+          </div>
+        }
+      </div>
+
+      <p class="exito-total">
+        Total: <strong>{{ totalPedidos() | currency: 'COP' : 'symbol-narrow' : '1.0-0' }}</strong>
+      </p>
+
+      <a routerLink="/catalogo" class="btn">Seguir comprando</a>
+    </div>
+  } @else {
+    <div class="encabezado-pagina">
+      <span>TU SELECCION</span>
+      <h1>Mi carrito</h1>
+    </div>
+
+    @if (error()) {
+      <div class="alerta alerta-error" role="alert">{{ error() }}</div>
+    }
+
+    @if (cargando()) {
+      <div class="cargando bloque-carga" aria-busy="true"></div>
+    } @else if (filas().length === 0) {
+      <div class="vacio">
+        <div class="vacio-icono">ð</div>
+        <h2>Tu carrito esta vaci­o</h2>
+        <p>Cuando agregues productos apareceran aqui­.</p>
+        <a routerLink="/catalogo" class="btn">Explorar productos</a>
+      </div>
+    } @else {
+      <div class="contenedor">
+        <!-- LISTA DE PRODUCTOS -->
+        <div class="lista">
+          @for (f of filas(); track f.item.articuloId) {
+            <article class="fila">
+              <div class="miniatura" [class]="claseColor(f.articulo?.categoriaNombre)">
+                <span>{{ etiquetaEnvase(f.articulo?.marcaNombre) }}</span>
+              </div>
+
+              <div class="datos">
+                <small>{{ f.articulo?.marcaNombre }}</small>
+                <h3>{{ f.articulo?.nombre ?? 'Producto' }}</h3>
+                <span class="unitario">{{ f.item.precioUnitario | currency: 'COP' : 'symbol-narrow' : '1.0-0' }} c/u</span>
+              </div>
+
+              <div class="cantidad" role="group" aria-label="Cantidad">
+                <button type="button" [disabled]="trabajando() || f.item.cantidad <= 1" (click)="cambiarCantidad(f, -1)" aria-label="Menos">â</button>
+                <span>{{ f.item.cantidad }}</span>
+                <button type="button" [disabled]="trabajando() || alLimite(f)" (click)="cambiarCantidad(f, 1)" aria-label="MÃ¡s">+</button>
+              </div>
+
+              <strong class="subtotal">{{ f.item.subtotal | currency: 'COP' : 'symbol-narrow' : '1.0-0' }}</strong>
+
+              <button type="button" class="quitar" [disabled]="trabajando()" (click)="quitar(f)" aria-label="Quitar del carrito">â</button>
+            </article>
+          }
+
+          <button type="button" class="vaciar" [disabled]="trabajando()" (click)="vaciar()">Vaciar carrito</button>
+        </div>
+
+        <!-- RESUMEN -->
+        <aside class="resumen">
+          <h2>Resumen</h2>
+          <div class="linea">
+            <span>Productos</span>
+            <span>{{ filas().length }}</span>
+          </div>
+          <div class="linea total">
+            <span>Total</span>
+            <strong>{{ carrito()?.total | currency: 'COP' : 'symbol-narrow' : '1.0-0' }}</strong>
+          </div>
+          <button type="button" class="btn btn-bloque" [disabled]="trabajando()" (click)="confirmar()">
+            {{ trabajando() ? 'Procesando...' : 'Confirmar pedido' }}
+          </button>
+          <a routerLink="/catalogo" class="seguir">â Seguir comprando</a>
+        </aside>
+      </div>
+    }
+  }
+</section>
+
