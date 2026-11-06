@@ -2,8 +2,8 @@
   @if (pedidos(); as confirmados) {
     <!-- PEDIDO CONFIRMADO -->
     <div class="exito">
-      <div class="exito-icono">â</div>
-      <h1>¡Gracias por tu compra!</h1>
+      <div class="exito-icono">Ã¢ÂÂ</div>
+      <h1>Â¡Gracias por tu compra!</h1>
       <p class="exito-texto">
         Tu pedido quedo registrado. Como tus productos pueden venir de varias tiendas, creamos
         {{ confirmados.length }} {{ confirmados.length === 1 ? 'pedido' : 'pedidos' }}.
@@ -42,9 +42,9 @@
       <div class="cargando bloque-carga" aria-busy="true"></div>
     } @else if (filas().length === 0) {
       <div class="vacio">
-        <div class="vacio-icono">ð</div>
-        <h2>Tu carrito esta vaci­o</h2>
-        <p>Cuando agregues productos apareceran aqui­.</p>
+        <div class="vacio-icono">Ã°ÂÂÂ</div>
+        <h2>Tu carrito esta vaciÂ­o</h2>
+        <p>Cuando agregues productos apareceran aquiÂ­.</p>
         <a routerLink="/catalogo" class="btn">Explorar productos</a>
       </div>
     } @else {
@@ -64,14 +64,14 @@
               </div>
 
               <div class="cantidad" role="group" aria-label="Cantidad">
-                <button type="button" [disabled]="trabajando() || f.item.cantidad <= 1" (click)="cambiarCantidad(f, -1)" aria-label="Menos">â</button>
+                <button type="button" [disabled]="trabajando() || f.item.cantidad <= 1" (click)="cambiarCantidad(f, -1)" aria-label="Menos">Ã¢ÂÂ</button>
                 <span>{{ f.item.cantidad }}</span>
-                <button type="button" [disabled]="trabajando() || alLimite(f)" (click)="cambiarCantidad(f, 1)" aria-label="MÃ¡s">+</button>
+                <button type="button" [disabled]="trabajando() || alLimite(f)" (click)="cambiarCantidad(f, 1)" aria-label="MÃÂ¡s">+</button>
               </div>
 
               <strong class="subtotal">{{ f.item.subtotal | currency: 'COP' : 'symbol-narrow' : '1.0-0' }}</strong>
 
-              <button type="button" class="quitar" [disabled]="trabajando()" (click)="quitar(f)" aria-label="Quitar del carrito">â</button>
+              <button type="button" class="quitar" [disabled]="trabajando()" (click)="quitar(f)" aria-label="Quitar del carrito">Ã¢ÂÂ</button>
             </article>
           }
 
@@ -92,7 +92,7 @@
           <button type="button" class="btn btn-bloque" [disabled]="trabajando()" (click)="confirmar()">
             {{ trabajando() ? 'Procesando...' : 'Confirmar pedido' }}
           </button>
-          <a routerLink="/catalogo" class="seguir">â Seguir comprando</a>
+          <a routerLink="/catalogo" class="seguir">Ã¢ÂÂ Seguir comprando</a>
         </aside>
       </div>
     }

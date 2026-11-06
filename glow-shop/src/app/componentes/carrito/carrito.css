@@ -6,7 +6,7 @@
   height: 260px;
 }
 
-/* --- Carrito vacío ------------------------------------------------------- */
+/* --- Carrito vacÃ­o ------------------------------------------------------- */
 
 .vacio {
   padding: 40px 20px;
@@ -319,5 +319,203 @@
   .quitar {
     grid-column: 3;
     grid-row: 1;
+  }
+}
+
+/* =========================================
+   IDENTIDAD VISUAL GLOW SHOP
+========================================= */
+
+:host {
+  display: block;
+  min-height: 100%;
+  background: #fffaf9;
+  color: #49343e;
+  font-family: Arial, sans-serif;
+}
+
+.pagina {
+  width: 100%;
+  max-width: 1450px;
+  min-height: 600px;
+  margin: 0 auto;
+  padding: 65px 8% 85px;
+  box-sizing: border-box;
+}
+
+/* ENCABEZADOS */
+
+.encabezado-pagina {
+  margin-bottom: 40px;
+  text-align: center;
+}
+
+.encabezado-pagina span {
+  display: inline-block;
+  margin-bottom: 14px;
+  color: #bd6287;
+  font-size: 11px;
+  font-weight: bold;
+  letter-spacing: 4px;
+}
+
+.encabezado-pagina h1 {
+  margin: 0;
+  color: #49343e;
+  font-family: Georgia, serif;
+  font-size: clamp(34px, 4vw, 45px);
+  font-weight: normal;
+}
+
+/* LISTA DE PRODUCTOS */
+
+.fila {
+  border-color: #f0e1e5;
+  border-radius: 16px;
+  box-shadow: 0 5px 18px #a66b780d;
+  transition: transform 0.25s, box-shadow 0.25s;
+}
+
+.fila:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px #a66b7818;
+}
+
+.datos h3 {
+  color: #49343e;
+  font-family: Georgia, serif;
+  font-size: 18px;
+}
+
+/* RESUMEN DE COMPRA */
+
+.resumen {
+  border-color: #f0e1e5;
+  box-shadow: 0 8px 28px #a66b7815;
+}
+
+.resumen h2 {
+  color: #49343e;
+  font-family: Georgia, serif;
+  font-size: 25px;
+}
+
+.linea.total strong {
+  color: #bd6287;
+}
+
+/* BOTONES */
+
+.btn {
+  min-height: 44px;
+  padding: 0 23px;
+  border: 1px solid #bd6287;
+  border-radius: 25px;
+  background: #bd6287;
+  color: white;
+  font-size: 13px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.25s;
+}
+
+.btn:hover:not(:disabled) {
+  background: #984b6b;
+  border-color: #984b6b;
+  transform: translateY(-2px);
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn-bloque {
+  width: 100%;
+}
+
+/* CARRITO VACÍO */
+
+.vacio {
+  padding: 65px 20px;
+  border: 1px solid #f1e2e6;
+  border-radius: 20px;
+  background: white;
+  box-shadow: 0 5px 20px #a66b780d;
+}
+
+.vacio-icono {
+  margin-bottom: 15px;
+  color: #bd6287;
+  font-size: 54px;
+}
+
+.vacio h2 {
+  color: #49343e;
+  font-family: Georgia, serif;
+  font-size: 28px;
+}
+
+.vacio p {
+  color: #927d85;
+  line-height: 1.7;
+}
+
+/* MENSAJES DE ERROR */
+
+.alerta-error {
+  padding: 15px 20px;
+  border: 1px solid #f0cbd5;
+  border-radius: 12px;
+  background: #fff0f3;
+  color: #a34e69;
+}
+
+/* CONFIRMACIÓN DEL PEDIDO */
+
+.exito {
+  padding: 35px 20px;
+}
+
+.exito h1 {
+  color: #49343e;
+  font-family: Georgia, serif;
+  font-size: 38px;
+}
+
+.exito-texto {
+  color: #927d85;
+}
+
+.pedido {
+  border-color: #f0e1e5;
+  box-shadow: 0 4px 15px #a66b780d;
+}
+
+.exito-total {
+  color: #49343e;
+}
+
+.exito-total strong {
+  color: #bd6287;
+}
+
+/* RESPONSIVE */
+
+@media (max-width: 700px) {
+  .pagina {
+    padding: 40px 5% 60px;
+  }
+
+  .encabezado-pagina {
+    margin-bottom: 28px;
+  }
+
+  .fila {
+    padding: 13px;
+  }
+
+  .exito h1 {
+    font-size: 30px;
   }
 }
