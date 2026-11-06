@@ -1,0 +1,238 @@
+
+/* Reutilizamos la identidad visual del login */
+@import '../login/login.css';
+
+/* =========================================
+   FORMULARIO DE REGISTRO
+========================================= */
+
+:host {
+  display: block;
+}
+
+.acceso {
+  min-height: 650px;
+  padding: 55px 7%;
+  box-sizing: border-box;
+}
+
+.panel-visual {
+  position: relative;
+  overflow: hidden;
+}
+
+.panel-visual h2 {
+  font-family: Georgia, serif;
+  font-size: clamp(32px, 3.5vw, 45px);
+  line-height: 1.25;
+  font-weight: normal;
+}
+
+.panel-visual h2 span {
+  color: #bd6287;
+}
+
+.etiqueta {
+  color: #bd6287;
+  font-size: 11px;
+  font-weight: bold;
+  letter-spacing: 4px;
+}
+
+.detalle {
+  max-width: 380px;
+  color: #927d85;
+  font-size: 14px;
+  line-height: 1.8;
+}
+
+/* =========================================
+   PANEL DEL FORMULARIO
+========================================= */
+
+.panel-formulario {
+  width: 100%;
+  max-width: 520px;
+  padding: 38px;
+  box-sizing: border-box;
+  border: 1px solid #f1e2e6;
+  border-radius: 20px;
+  background: #ffffff;
+  box-shadow: 0 12px 35px #a66b7815;
+}
+
+.panel-formulario h1 {
+  margin: 0 0 8px;
+  color: #49343e;
+  font-family: Georgia, serif;
+  font-size: 34px;
+  font-weight: normal;
+}
+
+.subtitulo {
+  margin: 0 0 25px;
+  color: #927d85;
+  font-size: 14px;
+}
+
+/* =========================================
+   CAMPOS
+========================================= */
+
+.panel-formulario form {
+  display: flex;
+  flex-direction: column;
+  gap: 17px;
+}
+
+.campo {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  min-width: 0;
+}
+
+.campo label {
+  color: #644c56;
+  font-size: 13px;
+  font-weight: bold;
+}
+
+.campo input {
+  width: 100%;
+  height: 45px;
+  padding: 0 13px;
+  box-sizing: border-box;
+  border: 1px solid #ead5dd;
+  border-radius: 9px;
+  outline: none;
+  background: #fffaf9;
+  color: #49343e;
+  font-family: Arial, sans-serif;
+  font-size: 13px;
+  transition: 0.25s;
+}
+
+.campo input:focus {
+  border-color: #bd6287;
+  background: white;
+  box-shadow: 0 0 0 3px #bd62871a;
+}
+
+.campo input::placeholder {
+  color: #b9a5ac;
+}
+
+.campo input.invalido {
+  border-color: #d66c80;
+  background: #fff8f9;
+}
+
+/* Dos campos en una misma fila */
+
+.fila {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+/* Ayudas y validaciones */
+
+.ayuda {
+  color: #a18c94;
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+.error-campo {
+  color: #c04e6a;
+  font-size: 11px;
+}
+
+/* =========================================
+   BOTÓN Y MENSAJES
+========================================= */
+
+.alerta {
+  margin-bottom: 18px;
+  padding: 13px 16px;
+  border-radius: 10px;
+  font-size: 13px;
+}
+
+.alerta-error {
+  border: 1px solid #f0cbd5;
+  background: #fff0f3;
+  color: #a34e69;
+}
+
+.btn-bloque {
+  width: 100%;
+  min-height: 46px;
+  margin-top: 5px;
+  border: 0;
+  border-radius: 25px;
+  background: #bd6287;
+  color: white;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.25s;
+}
+
+.btn-bloque:hover:not(:disabled) {
+  background: #984b6b;
+  transform: translateY(-2px);
+}
+
+.btn-bloque:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* =========================================
+   ENLACE AL LOGIN
+========================================= */
+
+.pie-formulario {
+  margin: 23px 0 0;
+  color: #927d85;
+  text-align: center;
+  font-size: 13px;
+}
+
+.pie-formulario a {
+  color: #bd6287;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.pie-formulario a:hover {
+  text-decoration: underline;
+}
+
+/* =========================================
+   RESPONSIVE
+========================================= */
+
+@media (max-width: 700px) {
+  .acceso {
+    padding: 35px 5%;
+  }
+
+  .panel-formulario {
+    max-width: 100%;
+    padding: 25px 20px;
+  }
+
+  .panel-formulario h1 {
+    font-size: 29px;
+  }
+}
+
+@media (max-width: 520px) {
+  .fila {
+    grid-template-columns: 1fr;
+    gap: 17px;
+  }
+}

@@ -1,1 +1,86 @@
-<p>registro works!</p>
+<section class="acceso">
+  <div class="panel-visual" aria-hidden="true">
+    <div class="circulo"></div>
+    <p class="etiqueta">UNETE A GLOW SHOP</p>
+    <h2>Crea tu cuenta y empieza a brillar <span>â¦</span></h2>
+    <p class="detalle">Con tu cuenta puedes comprar tus productos favoritos y seguir el estado de tus pedidos.</p>
+  </div>
+
+  <div class="panel-formulario">
+    <h1>Crear cuenta</h1>
+    <p class="subtitulo">Solo te tomara un minuto.</p>
+
+    @if (error()) {
+      <div class="alerta alerta-error" role="alert">{{ error() }}</div>
+    }
+
+    <form [formGroup]="formulario" (ngSubmit)="enviar()" novalidate>
+      <div class="campo">
+        <label for="nombre">Nombre completo</label>
+        <input id="nombre" type="text" formControlName="nombre" autocomplete="name" placeholder="Ana Torres" [class.invalido]="malo('nombre')" />
+        @if (malo('nombre')) {
+          <span class="error-campo">Escribe tu nombre.</span>
+        }
+      </div>
+
+      <div class="campo">
+        <label for="email">Correo electronico</label>
+        <input id="email" type="email" formControlName="email" autocomplete="email" placeholder="tucorreo@ejemplo.com" [class.invalido]="malo('email')" />
+        @if (malo('email')) {
+          <span class="error-campo">Escribe un correo valido.</span>
+        }
+      </div>
+
+      <div class="fila">
+        <div class="campo">
+          <label for="telefono">Telefono</label>
+          <input id="telefono" type="tel" formControlName="telefono" autocomplete="tel" placeholder="3001234567" [class.invalido]="malo('telefono')" />
+          @if (malo('telefono')) {
+            <span class="error-campo">De 7 a 15 numeros.</span>
+          }
+        </div>
+
+        <div class="campo">
+          <label for="fechaNacimiento">Fecha de nacimiento</label>
+          <input id="fechaNacimiento" type="date" formControlName="fechaNacimiento" [max]="hoy" [class.invalido]="malo('fechaNacimiento')" />
+          @if (malo('fechaNacimiento')) {
+            <span class="error-campo">Elige tu fecha.</span>
+          }
+        </div>
+      </div>
+
+      <div class="campo">
+        <label for="contrasena">Contrasena</label>
+        <input id="contrasena" type="password" formControlName="contrasena" autocomplete="new-password" placeholder="Crea una contraseÃ±a" [class.invalido]="malo('contrasena')" />
+        <span class="ayuda" [class.error-campo]="malo('contrasena')">
+          Mi­nimo 8 caracteres, una mayuscula y un numero.
+        </span>
+      </div>
+
+      <div class="campo">
+        <label for="confirmar">Confirmar contrasena</label>
+        <input
+          id="confirmar"
+          type="password"
+          formControlName="confirmar"
+          autocomplete="new-password"
+          placeholder="Repite tu contrasena"
+          [class.invalido]="formulario.controls.confirmar.touched && formulario.hasError('noCoinciden')"
+        />
+        @if (formulario.controls.confirmar.touched && formulario.hasError('noCoinciden')) {
+          <span class="error-campo">Las contrasenas no coinciden.</span>
+        }
+      </div>
+
+      <button type="submit" class="btn btn-bloque" [disabled]="enviando()">
+        {{ enviando() ? 'Creando tu cuenta...' : 'Crear cuenta' }}
+      </button>
+    </form>
+
+    <p class="pie-formulario">
+      Â¿Ya tienes cuenta?
+      <a routerLink="/login">Inicia sesion</a>
+    </p>
+  </div>
+</section>
+

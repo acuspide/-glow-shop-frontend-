@@ -1,18 +1,65 @@
-<header>
-  <h1>Glow Shop</h1>
 
-  <nav>
-    <a routerLink="/">Inicio</a>
-    <a routerLink="/catalogo">Catalogo</a>
-    <a routerLink="/login">Iniciar sesion</a>
-    <a routerLink="/registro">Registrarse</a>
+<header class="barra">
+  <a routerLink="/" class="marca">
+    Glow Shop <span>✦</span>
+  </a>
+
+  <nav class="enlaces" aria-label="Navegación principal">
+    <a routerLink="/" routerLinkActive="activo"
+       [routerLinkActiveOptions]="{ exact: true }">
+      Inicio
+    </a>
+    <a routerLink="/catalogo" routerLinkActive="activo">
+      Catálogo
+    </a>
   </nav>
+
+  <div class="acciones">
+    @if (auth.esCliente()) {
+      <a routerLink="/carrito" class="carrito"
+         aria-label="Ver mi carrito">
+        <span aria-hidden="true">🛍️</span>
+        @if (carrito.cantidadTotal() > 0) {
+          <b class="burbuja">{{ carrito.cantidadTotal() }}</b>
+        }
+      </a>
+    }
+
+    @if (auth.usuario(); as usuario) {
+      <span class="saludo">
+        Hola, {{ usuario.nombre.split(' ')[0] }}
+      </span>
+
+      <button type="button"
+              class="btn btn-borde pequeno"
+              (click)="cerrarSesion()">
+        Cerrar sesión
+      </button>
+    } @else {
+      <a routerLink="/login" class="enlace-sesion">
+        Iniciar sesión
+      </a>
+      <a routerLink="/registro" class="btn pequeno">
+        Registrarse
+      </a>
+    }
+  </div>
 </header>
 
-<main>
+<main class="contenido">
   <router-outlet />
 </main>
 
-<footer>
-  <p>Glow Shop - identificate care monda</p>
+<footer class="pie">
+  <div class="pie-contenido">
+    <div class="pie-superior">
+      <p class="pie-marca">Glow Shop <span>✦</span></p>
+      <p class="pie-eslogan">Tu belleza, tu esencia.</p>
+    </div>
+
+    <div class="pie-inferior">
+      <small>© 2026 Glow Shop. Todos los derechos reservados.</small>
+      <small>Hecho con <span class="corazon">♥</span> para ti.</small>
+    </div>
+  </div>
 </footer>
