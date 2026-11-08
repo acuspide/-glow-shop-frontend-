@@ -1,11 +1,12 @@
+```html
 <section class="pagina">
   <div class="encabezado-pagina">
-    <span>NUESTRO CATÃLOGO</span>
-    <h1>Encuentra tu proximo favorito</h1>
-    <p>Busca por nombre, categori­a, tono o tipo de piel.</p>
+    <span>NUESTRO CATÁLOGO</span>
+    <h1>Encuentra tu próximo favorito</h1>
+    <p>Busca por nombre, categoría, tono o tipo de piel.</p>
   </div>
 
-  <!-- BÃSQUEDA Y FILTROS -->
+  <!-- BÚSQUEDA Y FILTROS -->
   <div class="filtros">
     <form class="busqueda" (submit)="$event.preventDefault(); buscar(0)">
       <input
@@ -37,7 +38,7 @@
   </div>
 
   @if (categorias().length) {
-    <div class="categorias" role="group" aria-label="Categori­as">
+    <div class="categorias" role="group" aria-label="Categorías">
       <button type="button" class="chip" [class.activo]="categoriaId() === ''" (click)="elegirCategoria('')">Todo</button>
       @for (c of categorias(); track c.id) {
         <button type="button" class="chip" [class.activo]="categoriaId() === c.id" (click)="elegirCategoria(c.id)">
@@ -50,7 +51,7 @@
   <!-- AVISO FLOTANTE -->
   @if (aviso(); as a) {
     <div class="toast" [class.toast-error]="a.tipo === 'error'" role="status">
-      {{ a.tipo === 'exito' ? 'â' : '!' }} {{ a.texto }}
+      {{ a.tipo === 'exito' ? '✓' : '!' }} {{ a.texto }}
     </div>
   }
 
@@ -71,9 +72,9 @@
 
     @if (total === 0) {
       <div class="estado">
-        <div class="estado-icono">â¿</div>
+        <div class="estado-icono">✿</div>
         <h2>No encontramos productos</h2>
-        <p>Prueba con otra bÃºsqueda o quita algunos filtros.</p>
+        <p>Prueba con otra búsqueda o quita algunos filtros.</p>
         @if (hayFiltros()) {
           <button type="button" class="btn btn-borde" (click)="limpiarFiltros()">Quitar filtros</button>
         }
@@ -82,7 +83,7 @@
       <p class="conteo">
         {{ total }} {{ total === 1 ? 'producto' : 'productos' }}
         @if (hayFiltros()) {
-          Â· <button type="button" class="enlace" (click)="limpiarFiltros()">Quitar filtros</button>
+          · <button type="button" class="enlace" (click)="limpiarFiltros()">Quitar filtros</button>
         }
       </p>
 
@@ -94,7 +95,7 @@
               @if (a.cantidadDisponible === 0) {
                 <span class="sello agotado">Agotado</span>
               } @else if (a.cantidadDisponible < 5) {
-                <span class="sello pocas">Â¡Ãltimas {{ a.cantidadDisponible }}!</span>
+                <span class="sello pocas">¡Últimas {{ a.cantidadDisponible }}!</span>
               }
               <div class="envase">{{ etiquetaEnvase(a.marcaNombre) }}</div>
             </div>
@@ -128,9 +129,9 @@
       </div>
 
       @if (numeroPaginas().length > 1) {
-        <nav class="paginacion" aria-label="PÃ¡ginas del catÃ¡logo">
+        <nav class="paginacion" aria-label="Páginas del catálogo">
           <button type="button" class="pag" [disabled]="resultado()?.number === 0" (click)="irAPagina((resultado()?.number ?? 0) - 1)">
-            â Anterior
+            ← Anterior
           </button>
           @for (n of numeroPaginas(); track n) {
             <button type="button" class="pag numero" [class.activo]="n === resultado()?.number" (click)="irAPagina(n)">
@@ -143,10 +144,11 @@
             [disabled]="(resultado()?.number ?? 0) >= numeroPaginas().length - 1"
             (click)="irAPagina((resultado()?.number ?? 0) + 1)"
           >
-            Siguiente â
+            Siguiente →
           </button>
         </nav>
       }
     }
   }
 </section>
+```
