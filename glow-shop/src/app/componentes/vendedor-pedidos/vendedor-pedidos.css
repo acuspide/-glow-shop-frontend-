@@ -1,0 +1,158 @@
+.filtros {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 24px;
+}
+
+.filtros button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border: 1px solid #eadbd6;
+  border-radius: 30px;
+  background: white;
+  color: #806c70;
+  font-family: inherit;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.filtros button.activo {
+  border-color: #bd7188;
+  background: #bd7188;
+  color: white;
+}
+
+.contador {
+  min-width: 20px;
+  padding: 1px 7px;
+  border-radius: 10px;
+  background: #fbf0f1;
+  color: #bd7188;
+  font-size: 12px;
+}
+
+.filtros button.activo .contador {
+  background: white;
+}
+
+.lista {
+  display: grid;
+  gap: 16px;
+}
+
+.tarjeta {
+  padding: 20px 24px;
+  border: 1px solid #f0e3df;
+  border-radius: 16px;
+  background: white;
+  box-shadow: 0 3px 15px rgba(100, 65, 65, 0.04);
+}
+
+.tarjeta header,
+.tarjeta footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.estado {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-family: Arial, sans-serif;
+  font-size: 12px;
+  background: #f3dfe3;
+  color: #a95d75;
+}
+
+.estado.sin-pago {
+  background: #fdf3e2;
+  color: #a8782f;
+}
+
+.estado[data-estado='ENVIADO'] {
+  background: #e7eef8;
+  color: #4b6a93;
+}
+
+.estado[data-estado='ENTREGADO'] {
+  background: #e3f3ea;
+  color: #3d7a57;
+}
+
+.detalles {
+  margin: 16px 0;
+  padding: 12px 0;
+  list-style: none;
+  border-top: 1px dashed #f0e3df;
+  border-bottom: 1px dashed #f0e3df;
+  font-family: Arial, sans-serif;
+  color: #786669;
+}
+
+.detalles li {
+  display: flex;
+  justify-content: space-between;
+  padding: 4px 0;
+}
+
+.total {
+  color: #493b3d;
+}
+
+.btn {
+  padding: 10px 20px;
+  border: 1px solid #bd7188;
+  border-radius: 30px;
+  background: #bd7188;
+  color: white;
+  font-family: inherit;
+  cursor: pointer;
+}
+
+.btn:hover:not(:disabled) {
+  background: #a95d75;
+}
+
+.btn:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
+
+.mensaje {
+  padding: 40px;
+  text-align: center;
+  color: #927f80;
+  background: #fbf0f1;
+  border-radius: 16px;
+}
+
+.alerta,
+.error-pedido {
+  padding: 12px 16px;
+  border-radius: 12px;
+  background: #fdecee;
+  color: #b3394f;
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+}
+
+.alerta {
+  margin-bottom: 16px;
+}
+
+.error-pedido {
+  margin: 12px 0 0;
+}
+
+.enlace {
+  margin-left: 8px;
+  border: none;
+  background: none;
+  color: inherit;
+  text-decoration: underline;
+  cursor: pointer;
+}

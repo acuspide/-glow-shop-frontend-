@@ -1,1 +1,67 @@
-<p>vendedor-pedidos works!</p>
+<div class="filtros" role="group" aria-label="Filtrar pedidos">
+  @for (f of filtros; track f.id) {
+    <button type="button"
+            [class.activo]="filtro() === f.id"
+            (click)="filtro.set(f.id)">
+      {{ f.texto }}
+      <span class="contador">{{ cantidadEn(f.id) }}</span>
+    </button>
+  }
+</div>
+
+@if (error()) {
+  <div class="alerta" role="alert">
+    {{ error() }}
+    <button type="button" class="enlace" (click)="cargar()">Reintentar</button>
+  </div>
+}
+
+@if (cargando()) {
+  <p class="mensaje" aria-busy="true">Cargando pedidos…</p>
+} @else if (visibles().length === 0 && !error()) {
+  <p class="mensaje">
+    @if (pedidos().length === 0) {
+      Todavía no te han llegado pedidos.
+    } @else {
+      No hay pedidos en esta categoría.
+    }
+  </p>
+} @else {
+  <div class="lista">
+    @for (p of visibles(); track p.id) {
+      <article class="tarjeta">
+        <header>
+          <strong>Pedido #{{ p.id.slice(0, 8) }}</strong>
+          <span class="estado" [attr.data-estado]="p.estado" [class.sin-pago]="p.estado === 'CONFIRMADO' && !p.pagado">
+            {{ textoEstado(p) }}
+          </span>
+        </header>
+
+        <ul class="detalles">
+          @for (d of p.detalles; track d.articuloId) {
+            <li>
+              <span>{{ d.cantidad }} × {{ nombreDe(d.articuloId) }}</span>
+              <span>{{ d.subtotal | currency: 'COP' : 'symbol-narrow' : '1.0-0' }}</span>
+            </li>
+          }
+        </ul>
+
+        <footer>
+          <span class="total">Total: <strong>{{ p.total | currency: 'COP' : 'symbol-narrow' : '1.0-0' }}</strong></span>
+
+          @if (siguientePaso(p); as accion) {
+            <button type="button" class="btn"
+                    [disabled]="procesando() === p.id"
+                    (click)="avanzar(p, accion)">
+              {{ procesando() === p.id ? 'Guardando…' : accion.texto }}
+            </button>
+          }
+        </footer>
+
+        @if (erroresPorPedido()[p.id]; as mensaje) {
+          <p class="error-pedido" role="alert">{{ mensaje }}</p>
+        }
+      </article>
+    }
+  </div>
+}
