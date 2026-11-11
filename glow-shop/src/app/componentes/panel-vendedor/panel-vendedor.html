@@ -1,0 +1,27 @@
+<section class="pagina">
+  <div class="encabezado">
+    <span>PANEL DEL VENDEDOR</span>
+    <h1>Hola, {{ auth.usuario()?.nombre?.split(' ')?.[0] }}</h1>
+    <p>Desde aquí gestionas los pedidos, el inventario y los productos de tu tienda.</p>
+  </div>
+
+  <nav class="pestanas" role="tablist" aria-label="Secciones del panel">
+    @for (p of pestanas; track p.id) {
+      <button type="button" role="tab"
+              [class.activa]="activa() === p.id"
+              [attr.aria-selected]="activa() === p.id"
+              (click)="seleccionar(p.id)">
+        {{ p.titulo }}
+      </button>
+    }
+  </nav>
+
+  <div class="contenido-pestana" role="tabpanel">
+    @switch (activa()) {
+      @case ('pedidos') { <app-vendedor-pedidos /> }
+      @case ('inventario') { <p class="pronto">Aquí irá el inventario.</p> }
+      @case ('publicar') { <p class="pronto">Aquí irá el formulario para publicar.</p> }
+      @case ('tienda') { <p class="pronto">Aquí irá la información de tu tienda.</p> }
+    }
+  </div>
+</section>

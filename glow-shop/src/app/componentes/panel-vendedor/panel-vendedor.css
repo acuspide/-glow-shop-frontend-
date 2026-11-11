@@ -1,0 +1,60 @@
+.pagina {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 48px 7% 72px;
+}
+
+.encabezado span {
+  color: #bd7188;
+  font-size: 12px;
+  letter-spacing: 3px;
+}
+
+.encabezado h1 {
+  margin: 8px 0 6px;
+  font-size: 38px;
+  font-weight: 400;
+  color: #493b3d;
+}
+
+.encabezado p {
+  margin: 0;
+  color: #806c70;
+  font-family: Arial, sans-serif;
+}
+
+.pestanas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 32px 0 24px;
+  border-bottom: 1px solid #f0e3df;
+}
+
+.pestanas button {
+  padding: 12px 20px;
+  border: none;
+  border-bottom: 2px solid transparent;
+  background: transparent;
+  color: #806c70;
+  font-family: inherit;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+.pestanas button:hover {
+  color: #bd7188;
+}
+
+.pestanas button.activa {
+  color: #bd7188;
+  border-bottom-color: #bd7188;
+}
+
+.pronto {
+  padding: 40px;
+  text-align: center;
+  color: #927f80;
+  background: #fbf0f1;
+  border-radius: 16px;
+}

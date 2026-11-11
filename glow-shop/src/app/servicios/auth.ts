@@ -23,6 +23,7 @@ export class AuthService {
   readonly token = computed<string | null>(() => this.sesion()?.token ?? null);
   readonly haySesion = computed(() => this.sesion() !== null);
   readonly esCliente = computed(() => this.sesion()?.usuario.rol === 'CLIENTE');
+  readonly esVendedor = computed(() => this.sesion()?.usuario.rol === 'VENDEDOR');
 
   login(email: string, contrasena: string): Observable<LoginResponse> {
     return this.http
@@ -39,7 +40,7 @@ export class AuthService {
       this.borrarSesion();
       this.router.navigateByUrl('/');
     };
-    // Avisamos al backend; si falla (token vencido, etc.) igual cerramos la sesion aqui­.
+    // Avisamos al backend; si falla (token vencido, etc.) igual cerramos la sesion aquiï¿½.
     this.http.post<void>(`${API_URL}/auth/logout`, {}).subscribe({ next: terminar, error: terminar });
   }
 

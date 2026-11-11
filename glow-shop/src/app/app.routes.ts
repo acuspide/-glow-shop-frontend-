@@ -6,6 +6,9 @@ import { Registro } from './componentes/registro/registro';
 import { Catalogo } from './componentes/catalogo/catalogo';
 import { Carrito } from './componentes/carrito/carrito';
 import { authGuard } from './core/auth-guard';
+import { PanelVendedor } from './componentes/panel-vendedor/panel-vendedor';
+import { rolGuard } from './core/rol-guard';
+
 
 export const routes: Routes = [
     {
@@ -16,16 +19,19 @@ export const routes: Routes = [
         path: 'login',
         component: Login
     },
-    { path: 'registro', 
+    { path: 'registro',
         component: Registro },
     {
         path: 'catalogo',
         component: Catalogo
     },
     // El carrito solo se puede ver con sesion iniciada.
-    { path: 'carrito', 
+    { path: 'carrito',
         component: Carrito, canActivate: [authGuard] },
-    { path: '**', 
-        redirectTo: '' 
+            // El panel solo lo ve un vendedor con sesion iniciada.
+    { path: 'vendedor',
+        component: PanelVendedor, canActivate: [authGuard, rolGuard('VENDEDOR')] },
+    { path: '**',
+        redirectTo: ''
     },
 ];
