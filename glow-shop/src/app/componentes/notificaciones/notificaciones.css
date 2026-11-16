@@ -1,0 +1,6 @@
+/* Debajo del menú (que mide unos 70 px) para no tapar sus botones. */
+.avisos {
+  top: 70px;
+  z-index: 1080;
+  width: min(360px, 100%);
+}
