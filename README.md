@@ -73,7 +73,8 @@ Todas las contraseñas, menos la del administrador, son `Clave12345`.
 | Ruta | Pantalla | Quién entra |
 |---|---|---|
 | `/` | **Inicio**: categorías y los 3 más vendidos, salidos del backend | Todos |
-| `/catalogo` | **Catálogo**: tarjetas, búsqueda, filtros por categoría, tono y tipo de piel, y paginación (Anterior · Página X de Y · Siguiente) | Todos |
+| `/catalogo` | **Catálogo**: tarjetas, búsqueda mientras se escribe, filtros por categoría, tono y tipo de piel, y paginación (Anterior · Página X de Y · Siguiente) | Todos |
+| `/articulo/:id` | **Detalle del artículo**: promedio de estrellas, reseñas y formulario para calificar | Todos (calificar: clientes) |
 | `/login` | **Iniciar sesión** | Solo sin sesión (`invitadoGuard`) |
 | `/registro` | **Crear cuenta** de cliente | Solo sin sesión (`invitadoGuard`) |
 | `/carrito` | **Mi carrito**: cambiar cantidades, quitar y confirmar el pedido | Con sesión (`authGuard`) |
@@ -89,14 +90,17 @@ glow-shop/src/app/
 ├── componentes/   una carpeta por pantalla o pieza (header, footer, notificaciones, catalogo, ...)
 ├── core/          api-config (dirección del backend), interceptor, guards y traducción de errores HTTP
 ├── modelos/       interfaces "espejo" de los DTOs del backend (mismos nombres de campos)
-├── servicios/     un servicio por grupo de endpoints (auth, articulo, categoria, carrito, pedido, pago, reporte, vendedor, notificaciones)
+├── servicios/     un servicio por grupo de endpoints (auth, articulo, categoria, carrito, pedido, pago, calificacion, reporte, vendedor, notificaciones)
 └── utilidades/    funciones de apoyo para el diseño
+glow-shop/src/environments/   dirección del backend: environment.ts (desarrollo) y environment.prod.ts (producción)
 ```
 
 - **Servicios**: los componentes no escriben direcciones de la API; se las piden al servicio.
 - **Interceptor** (`core/auth-interceptor.ts`): pone `Authorization: Bearer <token>` en todas las peticiones. Si el backend responde 401, cierra la sesión, muestra un aviso y manda al login.
 - **Guards** (`core/auth-guard.ts`, `core/rol-guard.ts`): son una comodidad para la persona. La seguridad real la pone el backend, que valida el token en cada petición.
 - **Avisos** (`servicios/notificaciones.ts` + `componentes/notificaciones`): mensajes de éxito, error e información que desaparecen solos.
+- **Búsqueda reactiva** (`componentes/catalogo/catalogo.ts`): los filtros son señales combinadas en una sola (`computed`). Al escribir se espera 400 ms sin cambios (`debounceTime`) y se pide la página al backend; `switchMap` cancela la búsqueda anterior si llega una nueva.
+- **Variables de entorno** (`src/environments`): la dirección del backend no está escrita en los servicios.
 - **Errores** (`core/errores.ts`): traducen el código HTTP a un mensaje claro (400 "Revisa los datos", 404 "Lo que buscas no existe", 401 "Inicia sesión"…).
 
 ---
@@ -114,11 +118,24 @@ Para ver un rechazo: un pedido de más de $1.000.000 pagado con Nequi o tarjeta 
 
 ---
 
+## Segunda funcionalidad propia: calificaciones con estrellas
+
+Cada producto tiene su página de detalle (`/articulo/:id`, desde "Ver calificaciones" en el catálogo) con el promedio de estrellas y las reseñas, que salen de `GET /api/articulos/{id}/calificaciones`.
+
+- Una clienta califica de 1 a 5 estrellas con un comentario (`POST /api/articulos/{id}/calificaciones`).
+- El backend solo lo permite si **ya recibió** el producto (si no, responde 422) y una sola vez por producto (si no, responde 409).
+- En **Mis pedidos**, los pedidos entregados tienen un botón por producto que lleva a calificarlo.
+
+Para probar: con `ana@correo.com`, "Base líquida Fit Me" o "Protector solar FPS 50" se pueden calificar; "Gel limpiador espumoso" responde 422 porque Ana no lo ha recibido.
+
+---
+
 ## Flujo para probar de punta a punta
 
 1. Entrar con `ana@correo.com` / `Clave12345`.
-2. **Catálogo**: pasar a la página 2, buscar "labial" y agregar un producto al carrito (sale un aviso).
+2. **Catálogo**: pasar a la página 2, escribir "labial" (busca solo) y agregar un producto al carrito (sale un aviso).
 3. **Carrito**: confirmar el pedido.
 4. **Mis pedidos**: pagar con tarjeta de crédito; se aprueba al instante.
 5. Entrar con `vera@glow.com` → **Mi panel** → **Publicar artículo**: llenar el formulario y publicar (201 y aviso).
 6. Error a propósito: entrar con `sofia@glow.com` y publicar; responde **422** porque su tienda está PENDIENTE.
+7. Calificaciones: con Ana, en **Mis pedidos** → pedido entregado → "Base líquida Fit Me" → 4 estrellas y un comentario.
