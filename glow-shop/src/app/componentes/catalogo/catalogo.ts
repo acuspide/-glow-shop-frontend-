@@ -12,6 +12,9 @@ import { Categoria } from '../../modelos/vendedor';
 import { mensajeDeError } from '../../core/errores';
 import { claseColor, etiquetaEnvase } from '../../utilidades/visual';
 
+/** Cuántos productos se piden al backend en cada página. */
+const TAMANO_PAGINA = 6;
+
 @Component({
   selector: 'app-catalogo',
   imports: [CurrencyPipe],
@@ -46,9 +49,9 @@ export class Catalogo implements OnInit {
   protected readonly claseColor = claseColor;
   protected readonly etiquetaEnvase = etiquetaEnvase;
 
-  protected readonly numeroPaginas = computed(() =>
-    Array.from({ length: this.resultado()?.totalPages ?? 0 }, (_, i) => i),
-  );
+  // La página la pide Angular al backend (page y size); el backend responde number y totalPages.
+  protected readonly paginaActual = computed(() => this.resultado()?.number ?? 0);
+  protected readonly totalPaginas = computed(() => this.resultado()?.totalPages ?? 0);
 
   protected readonly hayFiltros = computed(
     () => !!(this.texto() || this.categoriaId() || this.tono() || this.tipoPiel()),
@@ -82,6 +85,7 @@ export class Catalogo implements OnInit {
           tipoPiel: this.tipoPiel(),
         },
         pagina,
+        TAMANO_PAGINA,
       )
       .subscribe({
         next: (respuesta) => {
@@ -123,8 +127,7 @@ export class Catalogo implements OnInit {
   }
 
   protected irAPagina(pagina: number): void {
-    const total = this.resultado()?.totalPages ?? 0;
-    if (pagina < 0 || pagina >= total) return;
+    if (pagina < 0 || pagina >= this.totalPaginas()) return;
     this.buscar(pagina);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }

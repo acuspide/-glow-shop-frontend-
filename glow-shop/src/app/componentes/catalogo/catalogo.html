@@ -121,26 +121,18 @@
         }
       </div>
 
-      @if (numeroPaginas().length > 1) {
-        <nav class="paginacion" aria-label="Páginas del catálogo">
-          <button type="button" class="pag" [disabled]="resultado()?.number === 0" (click)="irAPagina((resultado()?.number ?? 0) - 1)">
-            ← Anterior
-          </button>
-          @for (n of numeroPaginas(); track n) {
-            <button type="button" class="pag numero" [class.activo]="n === resultado()?.number" (click)="irAPagina(n)">
-              {{ n + 1 }}
-            </button>
-          }
-          <button
-            type="button"
-            class="pag"
-            [disabled]="(resultado()?.number ?? 0) >= numeroPaginas().length - 1"
-            (click)="irAPagina((resultado()?.number ?? 0) + 1)"
-          >
-            Siguiente →
-          </button>
-        </nav>
-      }
+      <!-- Paginación: cada clic le pide al backend otra página (page y size) -->
+      <nav class="d-flex justify-content-center align-items-center gap-3 mt-4" aria-label="Páginas del catálogo">
+        <button type="button" class="btn btn-outline-primary"
+                [disabled]="paginaActual() === 0" (click)="irAPagina(paginaActual() - 1)">
+          <i class="fa-solid fa-chevron-left me-1"></i>Anterior
+        </button>
+        <span class="text-body-secondary">Página {{ paginaActual() + 1 }} de {{ totalPaginas() }}</span>
+        <button type="button" class="btn btn-outline-primary"
+                [disabled]="paginaActual() >= totalPaginas() - 1" (click)="irAPagina(paginaActual() + 1)">
+          Siguiente<i class="fa-solid fa-chevron-right ms-1"></i>
+        </button>
+      </nav>
     }
   }
 </section>
