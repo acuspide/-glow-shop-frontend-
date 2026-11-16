@@ -30,6 +30,56 @@
       <div class="col-lg-7">
         <h2 class="h4 mb-3">Calificaciones</h2>
 
+        <!-- FORMULARIO REACTIVO PARA CALIFICAR (POST protegido con el token) -->
+        @if (auth.esCliente()) {
+          <form class="card border-0 shadow-sm p-4 mb-4" [formGroup]="formulario" (ngSubmit)="calificar()" novalidate>
+            <h3 class="h6">¿Ya lo usaste? Cuéntanos qué te pareció</h3>
+            @if (errorCalificar()) {
+              <div class="alert alert-danger small py-2">{{ errorCalificar() }}</div>
+            }
+
+            <div class="mb-3">
+              <span class="form-label d-block">Tu calificación</span>
+              <div class="estrellas fs-4" role="radiogroup" aria-label="Estrellas">
+                @for (n of estrellas; track n) {
+                  <button type="button" class="btn btn-link p-0 me-1 estrella" role="radio"
+                          [attr.aria-checked]="formulario.controls.puntuacion.value === n"
+                          [attr.aria-label]="n + (n === 1 ? ' estrella' : ' estrellas')"
+                          (click)="elegirEstrellas(n)">
+                    <i class="fa-star" [class.fa-solid]="n <= formulario.controls.puntuacion.value"
+                       [class.fa-regular]="n > formulario.controls.puntuacion.value"></i>
+                  </button>
+                }
+              </div>
+              @if (formulario.controls.puntuacion.touched && formulario.controls.puntuacion.invalid) {
+                <div class="text-danger small">Elige de 1 a 5 estrellas.</div>
+              }
+            </div>
+
+            <div class="mb-3">
+              <label for="comentario" class="form-label">Comentario</label>
+              <textarea id="comentario" rows="3" class="form-control" formControlName="comentario"
+                        placeholder="¿Cómo te fue con el producto?"
+                        [class.is-invalid]="formulario.controls.comentario.touched && formulario.controls.comentario.invalid"></textarea>
+              <div class="invalid-feedback">Escribe un comentario (máximo 500 caracteres).</div>
+            </div>
+
+            <!-- El botón se apaga mientras se envía -->
+            <button type="submit" class="btn btn-primary align-self-start" [disabled]="enviando()">
+              @if (enviando()) {
+                <span class="spinner-border spinner-border-sm me-2" aria-hidden="true"></span>Publicando...
+              } @else {
+                Publicar calificación
+              }
+            </button>
+          </form>
+        } @else if (!auth.haySesion()) {
+          <p class="small text-body-secondary">
+            <a routerLink="/login" [queryParams]="{ volverA: '/articulo/' + articuloId }">Inicia sesión</a>
+            como clienta para calificar este producto.
+          </p>
+        }
+
         @if (resenas(); as r) {
           <div class="d-flex align-items-center gap-3 mb-4">
             <span class="display-6">{{ r.promedio.toFixed(1) }}</span>

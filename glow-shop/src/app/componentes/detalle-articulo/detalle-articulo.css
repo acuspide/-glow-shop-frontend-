@@ -43,3 +43,8 @@
 .estrellas {
   color: var(--glow-dorado);
 }
+
+.estrella {
+  color: var(--glow-dorado);
+  text-decoration: none;
+}
