@@ -5,6 +5,7 @@ import { Observable, forkJoin, map, switchMap } from 'rxjs';
 
 import { ArticuloService } from '../../servicios/articulo';
 import { CarritoService } from '../../servicios/carrito';
+import { NotificacionesService } from '../../servicios/notificaciones';
 import { Articulo, ItemCarrito, Pedido } from '../../modelos/modelos';
 import { mensajeDeError } from '../../core/errores';
 import { claseColor, etiquetaEnvase } from '../../utilidades/visual';
@@ -23,6 +24,7 @@ interface Fila {
 export class Carrito implements OnInit {
   private readonly carritoService = inject(CarritoService);
   private readonly articuloService = inject(ArticuloService);
+  private readonly avisos = inject(NotificacionesService);
 
   protected readonly carrito = this.carritoService.carrito;
   protected readonly articulos = signal<Map<string, Articulo>>(new Map());
@@ -86,10 +88,14 @@ export class Carrito implements OnInit {
         next: (pedidos) => {
           this.pedidos.set(pedidos);
           this.trabajando.set(false);
+          this.avisos.exito(
+            pedidos.length === 1 ? 'Pedido confirmado. Ya puedes pagarlo.' : `Se confirmaron ${pedidos.length} pedidos. Ya puedes pagarlos.`,
+          );
           window.scrollTo({ top: 0, behavior: 'smooth' });
         },
         error: (e) => {
           this.error.set(mensajeDeError(e));
+          this.avisos.error(mensajeDeError(e));
           this.trabajando.set(false);
         },
       });
