@@ -64,34 +64,17 @@
       <p>Todo para cuidar de ti, en un solo lugar.</p>
     </div>
 
-    <div class="categorias-grid">
-
-      <a routerLink="/catalogo" class="categoria">
-        <div class="categoria-icono facial">✿</div>
-        <h3>Cuidado facial</h3>
-        <p>Cuida y consiente tu piel</p>
-      </a>
-
-      <a routerLink="/catalogo" class="categoria">
-        <div class="categoria-icono maquillaje">♡</div>
-        <h3>Maquillaje</h3>
-        <p>Resalta tu belleza</p>
-      </a>
-
-      <a routerLink="/catalogo" class="categoria">
-        <div class="categoria-icono capilar">❀</div>
-        <h3>Cuidado capilar</h3>
-        <p>Cabello sano y radiante</p>
-      </a>
-
-      <a routerLink="/catalogo" class="categoria">
-        <div class="categoria-icono corporal">✧</div>
-        <h3>Cuidado corporal</h3>
-        <p>Un momento para ti</p>
-      </a>
-
+    <!-- Cada categoría sale del backend; al hacer clic abre el catálogo ya filtrado -->
+    <div class="row row-cols-2 row-cols-md-3 row-cols-lg-5 g-3">
+      @for (c of categorias(); track c.id; let i = $index) {
+        <div class="col">
+          <a routerLink="/catalogo" [queryParams]="{ categoria: c.id }" class="categoria h-100">
+            <div class="categoria-icono" [class]="claseColor(c.nombre)">{{ simbolo(i) }}</div>
+            <h3 class="h5 mt-3 mb-0">{{ c.nombre }}</h3>
+          </a>
+        </div>
+      }
     </div>
-
   </section>
 
   <!-- PRODUCTOS DESTACADOS -->

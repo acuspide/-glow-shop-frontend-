@@ -1,6 +1,6 @@
 import { Component, OnInit, computed, inject, signal } from '@angular/core';
 import { CurrencyPipe } from '@angular/common';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { ArticuloService } from '../../servicios/articulo';
 import { AuthService } from '../../servicios/auth';
@@ -28,6 +28,7 @@ export class Catalogo implements OnInit {
   private readonly avisos = inject(NotificacionesService);
   private readonly auth = inject(AuthService);
   private readonly router = inject(Router);
+  private readonly route = inject(ActivatedRoute);
 
   // --- Filtros (cada uno es un "signal": cuando cambia, la pantalla se actualiza) ---
   protected readonly texto = signal('');
@@ -57,6 +58,8 @@ export class Catalogo implements OnInit {
   );
 
   ngOnInit(): void {
+    // Si viene desde el inicio con ?categoria=..., el catálogo arranca filtrado por esa categoría.
+    this.categoriaId.set(this.route.snapshot.queryParamMap.get('categoria') ?? '');
     this.cargarCategorias();
     this.buscar(0);
   }
