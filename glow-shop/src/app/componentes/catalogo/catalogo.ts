@@ -44,7 +44,6 @@ export class Catalogo implements OnInit {
 
   protected readonly tonos = ['CLARO', 'MEDIO', 'OSCURO'];
   protected readonly tiposPiel = ['SECA', 'GRASA', 'MIXTA', 'NORMAL', 'SENSIBLE'];
-  protected readonly esqueletos = [1, 2, 3, 4, 5, 6];
 
   protected readonly claseColor = claseColor;
   protected readonly etiquetaEnvase = etiquetaEnvase;

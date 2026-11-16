@@ -1,47 +1,50 @@
-```html
-<section class="pagina">
-  <div class="encabezado-pagina">
+<section class="container py-5">
+  <div class="encabezado-pagina text-center mb-4">
     <span>NUESTRO CATÁLOGO</span>
     <h1>Encuentra tu próximo favorito</h1>
     <p>Busca por nombre, categoría, tono o tipo de piel.</p>
   </div>
 
-  <!-- BÚSQUEDA Y FILTROS -->
-  <div class="filtros">
-    <form class="busqueda" (submit)="$event.preventDefault(); buscar(0)">
-      <input
-        type="search"
-        class="entrada"
-        placeholder="Buscar productos..."
-        aria-label="Buscar productos"
-        [value]="texto()"
-        (input)="cambiarTexto($event)"
-      />
-      <button type="submit" class="btn">Buscar</button>
-    </form>
+  <!-- BÚSQUEDA Y FILTROS: la búsqueda la hace el backend con la consulta JPQL -->
+  <div class="card border-0 shadow-sm mb-3">
+    <div class="card-body row g-2 align-items-center">
+      <form class="col-12 col-lg-6" (submit)="$event.preventDefault(); buscar(0)">
+        <div class="input-group">
+          <input type="search" class="form-control" placeholder="Buscar productos..."
+                 aria-label="Buscar productos" [value]="texto()" (input)="cambiarTexto($event)" />
+          <button type="submit" class="btn btn-primary">
+            <i class="fa-solid fa-magnifying-glass me-1"></i>Buscar
+          </button>
+        </div>
+      </form>
 
-    <div class="selectores">
-      <select class="entrada" aria-label="Filtrar por tono" (change)="elegirTono($event)">
-        <option value="" [selected]="tono() === ''">Todos los tonos</option>
-        @for (t of tonos; track t) {
-          <option [value]="t" [selected]="tono() === t">{{ t }}</option>
-        }
-      </select>
+      <div class="col-6 col-lg-3">
+        <select class="form-select" aria-label="Filtrar por tono" (change)="elegirTono($event)">
+          <option value="" [selected]="tono() === ''">Todos los tonos</option>
+          @for (t of tonos; track t) {
+            <option [value]="t" [selected]="tono() === t">{{ t }}</option>
+          }
+        </select>
+      </div>
 
-      <select class="entrada" aria-label="Filtrar por tipo de piel" (change)="elegirTipoPiel($event)">
-        <option value="" [selected]="tipoPiel() === ''">Todos los tipos de piel</option>
-        @for (p of tiposPiel; track p) {
-          <option [value]="p" [selected]="tipoPiel() === p">{{ p }}</option>
-        }
-      </select>
+      <div class="col-6 col-lg-3">
+        <select class="form-select" aria-label="Filtrar por tipo de piel" (change)="elegirTipoPiel($event)">
+          <option value="" [selected]="tipoPiel() === ''">Todos los tipos de piel</option>
+          @for (p of tiposPiel; track p) {
+            <option [value]="p" [selected]="tipoPiel() === p">{{ p }}</option>
+          }
+        </select>
+      </div>
     </div>
   </div>
 
   @if (categorias().length) {
-    <div class="categorias" role="group" aria-label="Categorías">
-      <button type="button" class="chip" [class.activo]="categoriaId() === ''" (click)="elegirCategoria('')">Todo</button>
+    <div class="d-flex flex-wrap gap-2 mb-4" role="group" aria-label="Categorías">
+      <button type="button" class="btn btn-sm" (click)="elegirCategoria('')"
+              [class.btn-primary]="categoriaId() === ''" [class.btn-outline-primary]="categoriaId() !== ''">Todo</button>
       @for (c of categorias(); track c.id) {
-        <button type="button" class="chip" [class.activo]="categoriaId() === c.id" (click)="elegirCategoria(c.id)">
+        <button type="button" class="btn btn-sm" (click)="elegirCategoria(c.id)"
+                [class.btn-primary]="categoriaId() === c.id" [class.btn-outline-primary]="categoriaId() !== c.id">
           {{ c.nombre }}
         </button>
       }
@@ -50,74 +53,75 @@
 
   <!-- RESULTADOS -->
   @if (error()) {
-    <div class="estado">
-      <p class="alerta alerta-error">{{ error() }}</p>
-      <button type="button" class="btn btn-borde" (click)="buscar(0)">Intentar de nuevo</button>
+    <div class="text-center py-5">
+      <div class="alert alert-danger d-inline-block">{{ error() }}</div>
+      <div><button type="button" class="btn btn-outline-primary" (click)="buscar(0)">Intentar de nuevo</button></div>
     </div>
   } @else if (cargando()) {
-    <div class="grilla" aria-busy="true">
-      @for (e of esqueletos; track e) {
-        <div class="cargando esqueleto"></div>
-      }
+    <div class="text-center py-5" aria-busy="true">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Cargando...</span>
+      </div>
     </div>
   } @else {
     @let total = resultado()?.totalElements ?? 0;
 
     @if (total === 0) {
-      <div class="estado">
-        <div class="estado-icono">✿</div>
-        <h2>No encontramos productos</h2>
-        <p>Prueba con otra búsqueda o quita algunos filtros.</p>
+      <div class="text-center py-5">
+        <div class="estado-icono mb-2">✿</div>
+        <h2 class="h4">No encontramos productos</h2>
+        <p class="text-body-secondary">Prueba con otra búsqueda o quita algunos filtros.</p>
         @if (hayFiltros()) {
-          <button type="button" class="btn btn-borde" (click)="limpiarFiltros()">Quitar filtros</button>
+          <button type="button" class="btn btn-outline-primary" (click)="limpiarFiltros()">Quitar filtros</button>
         }
       </div>
     } @else {
-      <p class="conteo">
+      <p class="text-body-secondary small">
         {{ total }} {{ total === 1 ? 'producto' : 'productos' }}
         @if (hayFiltros()) {
-          · <button type="button" class="enlace" (click)="limpiarFiltros()">Quitar filtros</button>
+          · <button type="button" class="btn btn-link btn-sm p-0 align-baseline" (click)="limpiarFiltros()">Quitar filtros</button>
         }
       </p>
 
-      <div class="grilla">
+      <!-- Cuadrícula: 1 columna en celular, 2 en tablet y 3 en computador -->
+      <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 g-4">
         @for (a of resultado()?.content; track a.id) {
-          <article class="tarjeta">
-            <div class="imagen" [class]="claseColor(a.categoriaNombre)">
-              <span class="etiqueta-categoria">{{ a.categoriaNombre }}</span>
-              @if (a.cantidadDisponible === 0) {
-                <span class="sello agotado">Agotado</span>
-              } @else if (a.cantidadDisponible < 5) {
-                <span class="sello pocas">¡Últimas {{ a.cantidadDisponible }}!</span>
-              }
-              <div class="envase">{{ etiquetaEnvase(a.marcaNombre) }}</div>
-            </div>
-
-            <div class="info">
-              <small>{{ a.marcaNombre }}</small>
-              <h3>{{ a.nombre }}</h3>
-              <p class="tienda">Vendido por {{ a.tiendaNombre }}</p>
-
-              <div class="detalles">
-                <span>{{ a.tono }}</span>
-                @for (p of a.tiposPiel; track p) {
-                  <span>{{ p }}</span>
+          <div class="col">
+            <article class="card h-100 border-0 shadow-sm tarjeta">
+              <div class="imagen" [class]="claseColor(a.categoriaNombre)">
+                <span class="badge rounded-pill etiqueta-categoria">{{ a.categoriaNombre }}</span>
+                @if (a.cantidadDisponible === 0) {
+                  <span class="badge text-bg-secondary sello">Agotado</span>
+                } @else if (a.cantidadDisponible < 5) {
+                  <span class="badge text-bg-warning sello">¡Últimas {{ a.cantidadDisponible }}!</span>
                 }
+                <div class="envase">{{ etiquetaEnvase(a.marcaNombre) }}</div>
               </div>
 
-              <div class="compra">
-                <strong class="precio">{{ a.precio | currency: 'COP' : 'symbol-narrow' : '1.0-0' }}</strong>
-                <button
-                  type="button"
-                  class="btn agregar"
-                  [disabled]="a.cantidadDisponible === 0 || agregando() === a.id"
-                  (click)="agregar(a)"
-                >
-                  {{ agregando() === a.id ? 'Agregando...' : 'Agregar' }}
-                </button>
+              <div class="card-body d-flex flex-column">
+                <small class="marca">{{ a.marcaNombre }}</small>
+                <h3 class="card-title h5 mt-1">{{ a.nombre }}</h3>
+                <p class="card-text small text-body-secondary mb-2">Vendido por {{ a.tiendaNombre }}</p>
+
+                <div class="d-flex flex-wrap gap-1 mb-3">
+                  <span class="badge rounded-pill detalle">{{ a.tono }}</span>
+                  @for (p of a.tiposPiel; track p) {
+                    <span class="badge rounded-pill detalle">{{ p }}</span>
+                  }
+                </div>
+
+                <div class="d-flex justify-content-between align-items-center mt-auto">
+                  <strong class="precio">{{ a.precio | currency: 'COP' : 'symbol-narrow' : '1.0-0' }}</strong>
+                  <button type="button" class="btn btn-primary btn-sm"
+                          [disabled]="a.cantidadDisponible === 0 || agregando() === a.id"
+                          (click)="agregar(a)">
+                    <i class="fa-solid fa-bag-shopping me-1"></i>
+                    {{ agregando() === a.id ? 'Agregando...' : 'Agregar' }}
+                  </button>
+                </div>
               </div>
-            </div>
-          </article>
+            </article>
+          </div>
         }
       </div>
 
@@ -136,4 +140,3 @@
     }
   }
 </section>
-```

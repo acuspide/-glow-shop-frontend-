@@ -45,6 +45,8 @@
   --bs-btn-hover-border-color: #bd7188;
   --bs-btn-active-bg: #a95d75;
   --bs-btn-active-border-color: #a95d75;
+  --bs-btn-disabled-color: #bd7188;
+  --bs-btn-disabled-border-color: #bd7188;
 }
 
 .form-control:focus,
