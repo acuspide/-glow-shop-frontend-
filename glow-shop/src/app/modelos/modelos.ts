@@ -85,6 +85,7 @@ export interface Pedido {
   clienteId: string;
   tiendaId: string;
   estado: string;
+  pagado: boolean;
   detalles: DetallePedido[];
   subtotal: number;
   total: number;
