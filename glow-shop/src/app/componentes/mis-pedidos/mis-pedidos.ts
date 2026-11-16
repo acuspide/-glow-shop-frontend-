@@ -4,6 +4,7 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 
 import { PedidoService } from '../../servicios/pedido';
+import { ArticuloService } from '../../servicios/articulo';
 import { PagoService } from '../../servicios/pago';
 import { NotificacionesService } from '../../servicios/notificaciones';
 import { mensajeDeError } from '../../core/errores';
@@ -33,12 +34,15 @@ const ESTADOS: Record<string, { texto: string; clase: string }> = {
 export class MisPedidos implements OnInit {
   private readonly fb = inject(FormBuilder);
   private readonly pedidoService = inject(PedidoService);
+  private readonly articuloService = inject(ArticuloService);
   private readonly pagoService = inject(PagoService);
   private readonly avisos = inject(NotificacionesService);
 
   protected readonly pedidos = signal<Pedido[]>([]);
   protected readonly cargando = signal(true);
   protected readonly error = signal('');
+  /** Nombre de cada artículo (el pedido solo trae el id), para los enlaces de "Calificar". */
+  protected readonly nombres = signal<Record<string, string>>({});
 
   // --- Pago ---
   protected readonly mediosDePago: { valor: MedioPago; texto: string; icono: string }[] = [
@@ -59,6 +63,9 @@ export class MisPedidos implements OnInit {
 
   ngOnInit(): void {
     this.cargar();
+    this.articuloService.listar().subscribe({
+      next: (articulos) => this.nombres.set(Object.fromEntries(articulos.map((a) => [a.id, a.nombre]))),
+    });
   }
 
   protected cargar(): void {

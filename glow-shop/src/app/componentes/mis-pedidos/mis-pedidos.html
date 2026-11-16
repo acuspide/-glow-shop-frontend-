@@ -41,6 +41,20 @@
                 }
               </div>
 
+              <!-- Un pedido entregado se puede calificar: cada producto lleva a su detalle -->
+              @if (p.estado === 'ENTREGADO') {
+                <div class="border-top mt-3 pt-3">
+                  <p class="small mb-2">Califica lo que recibiste:</p>
+                  <div class="d-flex flex-wrap gap-2">
+                    @for (d of p.detalles; track d.articuloId) {
+                      <a class="btn btn-outline-primary btn-sm" [routerLink]="['/articulo', d.articuloId]">
+                        <i class="fa-regular fa-star me-1"></i>{{ nombres()[d.articuloId] ?? 'Producto' }}
+                      </a>
+                    }
+                  </div>
+                </div>
+              }
+
               <!-- Formulario reactivo del pago simulado (POST protegido con el token) -->
               @if (pagandoId() === p.id) {
                 <form class="border-top mt-3 pt-3" [formGroup]="formularioPago" (ngSubmit)="pagar(p)" novalidate>
