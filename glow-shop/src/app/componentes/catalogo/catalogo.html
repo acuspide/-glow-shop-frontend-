@@ -48,13 +48,6 @@
     </div>
   }
 
-  <!-- AVISO FLOTANTE -->
-  @if (aviso(); as a) {
-    <div class="toast" [class.toast-error]="a.tipo === 'error'" role="status">
-      {{ a.tipo === 'exito' ? '✓' : '!' }} {{ a.texto }}
-    </div>
-  }
-
   <!-- RESULTADOS -->
   @if (error()) {
     <div class="estado">

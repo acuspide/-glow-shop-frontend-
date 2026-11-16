@@ -6,15 +6,11 @@ import { ArticuloService } from '../../servicios/articulo';
 import { AuthService } from '../../servicios/auth';
 import { CarritoService } from '../../servicios/carrito';
 import { CategoriaService } from '../../servicios/categoria';
+import { NotificacionesService } from '../../servicios/notificaciones';
 import { Articulo, Pagina } from '../../modelos/modelos';
 import { Categoria } from '../../modelos/vendedor';
 import { mensajeDeError } from '../../core/errores';
 import { claseColor, etiquetaEnvase } from '../../utilidades/visual';
-
-interface Aviso {
-  tipo: 'exito' | 'error';
-  texto: string;
-}
 
 @Component({
   selector: 'app-catalogo',
@@ -26,6 +22,7 @@ export class Catalogo implements OnInit {
   private readonly articuloService = inject(ArticuloService);
   private readonly carritoService = inject(CarritoService);
   private readonly categoriaService = inject(CategoriaService);
+  private readonly avisos = inject(NotificacionesService);
   private readonly auth = inject(AuthService);
   private readonly router = inject(Router);
 
@@ -41,7 +38,6 @@ export class Catalogo implements OnInit {
   protected readonly cargando = signal(true);
   protected readonly error = signal('');
   protected readonly agregando = signal<string | null>(null);
-  protected readonly aviso = signal<Aviso | null>(null);
 
   protected readonly tonos = ['CLARO', 'MEDIO', 'OSCURO'];
   protected readonly tiposPiel = ['SECA', 'GRASA', 'MIXTA', 'NORMAL', 'SENSIBLE'];
@@ -57,8 +53,6 @@ export class Catalogo implements OnInit {
   protected readonly hayFiltros = computed(
     () => !!(this.texto() || this.categoriaId() || this.tono() || this.tipoPiel()),
   );
-
-  private temporizadorAviso: ReturnType<typeof setTimeout> | undefined;
 
   ngOnInit(): void {
     this.cargarCategorias();
@@ -141,7 +135,7 @@ export class Catalogo implements OnInit {
       return;
     }
     if (!this.auth.esCliente()) {
-      this.mostrarAviso('error', 'Solo las cuentas de cliente pueden comprar.');
+      this.avisos.error('Solo las cuentas de cliente pueden comprar.');
       return;
     }
 
@@ -149,18 +143,13 @@ export class Catalogo implements OnInit {
     this.carritoService.agregar(articulo.id, 1).subscribe({
       next: () => {
         this.agregando.set(null);
-        this.mostrarAviso('exito', `«${articulo.nombre}» se agregó a tu carrito.`);
+        this.avisos.exito(`«${articulo.nombre}» se agregó a tu carrito.`);
       },
       error: (e) => {
         this.agregando.set(null);
-        this.mostrarAviso('error', mensajeDeError(e));
+        this.avisos.error(mensajeDeError(e));
       },
     });
   }
 
-  private mostrarAviso(tipo: Aviso['tipo'], texto: string): void {
-    clearTimeout(this.temporizadorAviso);
-    this.aviso.set({ tipo, texto });
-    this.temporizadorAviso = setTimeout(() => this.aviso.set(null), 3800);
-  }
 }
