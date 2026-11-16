@@ -5,14 +5,11 @@ import { Router } from '@angular/router';
 import { ArticuloService } from '../../servicios/articulo';
 import { AuthService } from '../../servicios/auth';
 import { CarritoService } from '../../servicios/carrito';
+import { CategoriaService } from '../../servicios/categoria';
 import { Articulo, Pagina } from '../../modelos/modelos';
+import { Categoria } from '../../modelos/vendedor';
 import { mensajeDeError } from '../../core/errores';
 import { claseColor, etiquetaEnvase } from '../../utilidades/visual';
-
-interface CategoriaOpcion {
-  id: string;
-  nombre: string;
-}
 
 interface Aviso {
   tipo: 'exito' | 'error';
@@ -28,6 +25,7 @@ interface Aviso {
 export class Catalogo implements OnInit {
   private readonly articuloService = inject(ArticuloService);
   private readonly carritoService = inject(CarritoService);
+  private readonly categoriaService = inject(CategoriaService);
   private readonly auth = inject(AuthService);
   private readonly router = inject(Router);
 
@@ -39,7 +37,7 @@ export class Catalogo implements OnInit {
 
   // --- Resultados y estado de la pantalla ---
   protected readonly resultado = signal<Pagina<Articulo> | null>(null);
-  protected readonly categorias = signal<CategoriaOpcion[]>([]);
+  protected readonly categorias = signal<Categoria[]>([]);
   protected readonly cargando = signal(true);
   protected readonly error = signal('');
   protected readonly agregando = signal<string | null>(null);
@@ -67,18 +65,10 @@ export class Catalogo implements OnInit {
     this.buscar(0);
   }
 
-  /** Las categorías salen de los artículos existentes (el backend no tiene un GET de categorías). */
+  /** GET /api/categorias: los botones de categoría salen del backend. */
   private cargarCategorias(): void {
-    this.articuloService.listar().subscribe({
-      next: (articulos) => {
-        const unicas = new Map<string, string>();
-        for (const a of articulos) {
-          unicas.set(a.categoriaId, a.categoriaNombre);
-        }
-        const lista = [...unicas].map(([id, nombre]) => ({ id, nombre }));
-        lista.sort((a, b) => a.nombre.localeCompare(b.nombre));
-        this.categorias.set(lista);
-      },
+    this.categoriaService.listar().subscribe({
+      next: (categorias) => this.categorias.set(categorias),
       error: () => {
         // Si falla, simplemente no mostramos los botones de categoría; el error principal sale en buscar().
       },
