@@ -42,7 +42,7 @@ export class MisPedidos implements OnInit {
   protected readonly cargando = signal(true);
   protected readonly error = signal('');
   /** Nombre de cada artículo (el pedido solo trae el id), para los enlaces de "Calificar". */
-  protected readonly nombres = signal<Record<string, string>>({});
+  protected readonly nombres = signal<Partial<Record<string, string>>>({});
 
   // --- Pago ---
   protected readonly mediosDePago: { valor: MedioPago; texto: string; icono: string }[] = [
