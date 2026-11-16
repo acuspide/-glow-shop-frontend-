@@ -1,0 +1,44 @@
+<section class="container py-5">
+  <div class="text-center mb-4">
+    <span class="etiqueta">TUS COMPRAS</span>
+    <h1 class="fw-normal">Mis pedidos</h1>
+    <p class="text-body-secondary">Aquí ves el estado de cada pedido y pagas los que están pendientes.</p>
+  </div>
+
+  @if (error()) {
+    <div class="alert alert-danger d-flex justify-content-between align-items-center">
+      {{ error() }}
+      <button type="button" class="btn btn-outline-danger btn-sm" (click)="cargar()">Reintentar</button>
+    </div>
+  } @else if (cargando()) {
+    <div class="text-center py-5">
+      <div class="spinner-border text-primary" role="status"><span class="visually-hidden">Cargando...</span></div>
+    </div>
+  } @else if (pedidos().length === 0) {
+    <div class="text-center py-5">
+      <p class="text-body-secondary">Todavía no tienes pedidos.</p>
+      <a routerLink="/catalogo" class="btn btn-primary">Ir al catálogo</a>
+    </div>
+  } @else {
+    <div class="row row-cols-1 row-cols-md-2 g-4">
+      @for (p of pedidos(); track p.id) {
+        <div class="col">
+          <article class="card h-100 border-0 shadow-sm">
+            <div class="card-body">
+              <div class="d-flex justify-content-between align-items-start mb-2">
+                <h2 class="h6 mb-0">Pedido #{{ p.id.slice(0, 8) }}</h2>
+                <span class="badge rounded-pill" [class]="estado(p).clase">{{ estado(p).texto }}</span>
+              </div>
+              <p class="small text-body-secondary mb-3">
+                {{ p.detalles.length }} {{ p.detalles.length === 1 ? 'producto' : 'productos' }}
+              </p>
+              <p class="mb-0">
+                Total: <strong>{{ p.total | currency: 'COP' : 'symbol-narrow' : '1.0-0' }}</strong>
+              </p>
+            </div>
+          </article>
+        </div>
+      }
+    </div>
+  }
+</section>

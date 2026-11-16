@@ -8,6 +8,7 @@ import { Carrito } from './componentes/carrito/carrito';
 import { authGuard, invitadoGuard } from './core/auth-guard';
 import { PanelVendedor } from './componentes/panel-vendedor/panel-vendedor';
 import { rolGuard } from './core/rol-guard';
+import { MisPedidos } from './componentes/mis-pedidos/mis-pedidos';
 
 
 export const routes: Routes = [
@@ -32,6 +33,9 @@ export const routes: Routes = [
             // El panel solo lo ve un vendedor con sesion iniciada.
     { path: 'vendedor',
         component: PanelVendedor, canActivate: [authGuard, rolGuard('VENDEDOR')] },
+    // Mis pedidos: solo un cliente con sesion iniciada.
+    { path: 'pedidos',
+        component: MisPedidos, canActivate: [authGuard, rolGuard('CLIENTE')] },
     { path: '**',
         redirectTo: ''
     },
