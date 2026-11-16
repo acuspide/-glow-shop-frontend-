@@ -138,64 +138,6 @@
 
 /* CAMPOS */
 
-.campo {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  margin-bottom: 22px;
-}
-
-.campo label {
-  font-size: 13px;
-  font-weight: bold;
-}
-
-.campo input {
-  width: 100%;
-  height: 49px;
-  padding: 0 16px;
-  border: 1px solid #ead5dd;
-  border-radius: 9px;
-  outline: none;
-  background: white;
-  color: #49343e;
-  font-size: 13px;
-  transition: 0.3s;
-}
-
-.campo input:focus {
-  border-color: #bd6287;
-  box-shadow: 0 0 0 3px #bd62871a;
-}
-
-.campo input::placeholder {
-  color: #b9a5ac;
-}
-
-/* OPCIONES */
-
-.opciones-login {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 12px;
-  margin: 8px 0 25px;
-  font-size: 12px;
-}
-
-.recordar {
-  display: flex;
-  align-items: center;
-  gap: 7px;
-  color: #806c74;
-}
-
-.recordar input {
-  accent-color: #bd6287;
-}
-
-.opciones-login a,
 .registro-enlace a {
   color: #bd6287;
   font-weight: bold;
@@ -208,34 +150,6 @@
 }
 
 /* BOTÓN */
-
-.boton-login {
-  width: 100%;
-  height: 51px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0 22px;
-  border: none;
-  border-radius: 30px;
-  background: #bd6287;
-  color: white;
-  font-size: 14px;
-  font-weight: bold;
-  cursor: pointer;
-  transition: 0.3s;
-}
-
-.boton-login:hover {
-  background: #944361;
-  transform: translateY(-2px);
-}
-
-.boton-login span {
-  font-size: 20px;
-}
-
-/* REGISTRO Y PIE */
 
 .registro-enlace {
   margin-top: 30px;
