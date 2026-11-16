@@ -1,0 +1,46 @@
+.marca {
+  color: var(--glow-rosa);
+  font-size: 28px;
+  font-weight: bold;
+  letter-spacing: -1px;
+}
+
+.marca span {
+  color: var(--glow-dorado);
+  font-size: 24px;
+}
+
+.nav-link {
+  color: #786669;
+}
+
+.nav-link:hover,
+.nav-link.active {
+  color: var(--glow-rosa);
+}
+
+.saludo {
+  color: #806c70;
+  font-size: 14px;
+}
+
+.carrito {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: #fbf0f1;
+  color: var(--glow-rosa);
+  text-decoration: none;
+  font-size: 18px;
+}
+
+.carrito:hover {
+  background: #f3dfe3;
+}
+
+.navbar-toggler:focus {
+  box-shadow: 0 0 0 0.2rem rgba(189, 113, 136, 0.25);
+}

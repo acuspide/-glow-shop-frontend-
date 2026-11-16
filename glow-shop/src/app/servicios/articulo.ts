@@ -14,6 +14,11 @@ export class ArticuloService {
     return this.http.get<Articulo[]>(`${API_URL}/articulos`);
   }
 
+  /** GET /api/articulos/{id}: el detalle de un artículo. */
+  obtener(id: string): Observable<Articulo> {
+    return this.http.get<Articulo>(`${API_URL}/articulos/${id}`);
+  }
+
   /** GET /api/buscarArticulos: busqueda con filtros opcionales y paginacion. */
   buscar(filtros: FiltrosBusqueda, pagina = 0, tamano = 12): Observable<Pagina<Articulo>> {
     let params = new HttpParams().set('page', pagina).set('size', tamano);

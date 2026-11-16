@@ -1,0 +1,15 @@
+<div class="avisos position-fixed end-0 p-3" aria-live="polite">
+  @for (aviso of servicio.avisos(); track aviso.id) {
+    <div class="alert shadow-sm d-flex align-items-center gap-2 mb-2" role="alert"
+         [class.alert-success]="aviso.tipo === 'exito'"
+         [class.alert-danger]="aviso.tipo === 'error'"
+         [class.alert-info]="aviso.tipo === 'info'">
+      <i class="fa-solid"
+         [class.fa-circle-check]="aviso.tipo === 'exito'"
+         [class.fa-circle-exclamation]="aviso.tipo === 'error'"
+         [class.fa-circle-info]="aviso.tipo === 'info'"></i>
+      <span class="flex-grow-1">{{ aviso.texto }}</span>
+      <button type="button" class="btn-close" aria-label="Cerrar" (click)="servicio.quitar(aviso.id)"></button>
+    </div>
+  }
+</div>

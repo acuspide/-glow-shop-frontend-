@@ -5,9 +5,11 @@ import { Login } from './componentes/login/login';
 import { Registro } from './componentes/registro/registro';
 import { Catalogo } from './componentes/catalogo/catalogo';
 import { Carrito } from './componentes/carrito/carrito';
-import { authGuard } from './core/auth-guard';
+import { authGuard, invitadoGuard } from './core/auth-guard';
 import { PanelVendedor } from './componentes/panel-vendedor/panel-vendedor';
 import { rolGuard } from './core/rol-guard';
+import { MisPedidos } from './componentes/mis-pedidos/mis-pedidos';
+import { DetalleArticulo } from './componentes/detalle-articulo/detalle-articulo';
 
 
 export const routes: Routes = [
@@ -15,22 +17,29 @@ export const routes: Routes = [
         path:'',
         component: Inicio
     },
+    // Login y registro solo para quien todavia no tiene sesion.
     {
         path: 'login',
-        component: Login
+        component: Login, canActivate: [invitadoGuard]
     },
     { path: 'registro',
-        component: Registro },
+        component: Registro, canActivate: [invitadoGuard] },
     {
         path: 'catalogo',
         component: Catalogo
     },
+    // Detalle de un articulo con sus calificaciones (publico).
+    { path: 'articulo/:id',
+        component: DetalleArticulo },
     // El carrito solo se puede ver con sesion iniciada.
     { path: 'carrito',
         component: Carrito, canActivate: [authGuard] },
             // El panel solo lo ve un vendedor con sesion iniciada.
     { path: 'vendedor',
         component: PanelVendedor, canActivate: [authGuard, rolGuard('VENDEDOR')] },
+    // Mis pedidos: solo un cliente con sesion iniciada.
+    { path: 'pedidos',
+        component: MisPedidos, canActivate: [authGuard, rolGuard('CLIENTE')] },
     { path: '**',
         redirectTo: ''
     },

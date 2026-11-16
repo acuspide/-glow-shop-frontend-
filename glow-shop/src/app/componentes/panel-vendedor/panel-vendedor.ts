@@ -2,6 +2,7 @@ import { Component, inject, signal } from '@angular/core';
 
 import { AuthService } from '../../servicios/auth';
 import { VendedorPedidos } from '../vendedor-pedidos/vendedor-pedidos';
+import { VendedorPublicar } from '../vendedor-publicar/vendedor-publicar';
 
 type Pestana = 'pedidos' | 'inventario' | 'publicar' | 'tienda';
 
@@ -11,7 +12,7 @@ type Pestana = 'pedidos' | 'inventario' | 'publicar' | 'tienda';
  */
 @Component({
   selector: 'app-panel-vendedor',
-  imports: [VendedorPedidos],
+  imports: [VendedorPedidos, VendedorPublicar],
   templateUrl: './panel-vendedor.html',
   styleUrl: './panel-vendedor.css',
 })

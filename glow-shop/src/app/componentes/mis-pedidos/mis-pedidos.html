@@ -1,0 +1,99 @@
+<section class="container py-5">
+  <div class="text-center mb-4">
+    <span class="etiqueta">TUS COMPRAS</span>
+    <h1 class="fw-normal">Mis pedidos</h1>
+    <p class="text-body-secondary">Aquí ves el estado de cada pedido y pagas los que están pendientes.</p>
+  </div>
+
+  @if (error()) {
+    <div class="alert alert-danger d-flex justify-content-between align-items-center">
+      {{ error() }}
+      <button type="button" class="btn btn-outline-danger btn-sm" (click)="cargar()">Reintentar</button>
+    </div>
+  } @else if (cargando()) {
+    <div class="text-center py-5">
+      <div class="spinner-border text-primary" role="status"><span class="visually-hidden">Cargando...</span></div>
+    </div>
+  } @else if (pedidos().length === 0) {
+    <div class="text-center py-5">
+      <p class="text-body-secondary">Todavía no tienes pedidos.</p>
+      <a routerLink="/catalogo" class="btn btn-primary">Ir al catálogo</a>
+    </div>
+  } @else {
+    <div class="row row-cols-1 row-cols-md-2 g-4">
+      @for (p of pedidos(); track p.id) {
+        <div class="col">
+          <article class="card h-100 border-0 shadow-sm">
+            <div class="card-body">
+              <div class="d-flex justify-content-between align-items-start mb-2">
+                <h2 class="h6 mb-0">Pedido #{{ p.id.slice(0, 8) }}</h2>
+                <span class="badge rounded-pill" [class]="estado(p).clase">{{ estado(p).texto }}</span>
+              </div>
+              <p class="small text-body-secondary mb-3">
+                {{ p.detalles.length }} {{ p.detalles.length === 1 ? 'producto' : 'productos' }}
+              </p>
+              <div class="d-flex justify-content-between align-items-center">
+                <span>Total: <strong>{{ p.total | currency: 'COP' : 'symbol-narrow' : '1.0-0' }}</strong></span>
+                @if (esperaPago(p)) {
+                  <button type="button" class="btn btn-primary btn-sm" (click)="abrirPago(p)">
+                    <i class="fa-solid fa-lock me-1"></i>{{ pagandoId() === p.id ? 'Cancelar' : 'Pagar' }}
+                  </button>
+                }
+              </div>
+
+              <!-- Un pedido entregado se puede calificar: cada producto lleva a su detalle -->
+              @if (p.estado === 'ENTREGADO') {
+                <div class="border-top mt-3 pt-3">
+                  <p class="small mb-2">Califica lo que recibiste:</p>
+                  <div class="d-flex flex-wrap gap-2">
+                    @for (d of p.detalles; track d.articuloId) {
+                      <a class="btn btn-outline-primary btn-sm" [routerLink]="['/articulo', d.articuloId]">
+                        <i class="fa-regular fa-star me-1"></i>{{ nombres()[d.articuloId] ?? 'Producto' }}
+                      </a>
+                    }
+                  </div>
+                </div>
+              }
+
+              <!-- Formulario reactivo del pago simulado (POST protegido con el token) -->
+              @if (pagandoId() === p.id) {
+                <form class="border-top mt-3 pt-3" [formGroup]="formularioPago" (ngSubmit)="pagar(p)" novalidate>
+                  @if (rechazos()[p.id]; as rechazo) {
+                    <div class="alert alert-warning small py-2">
+                      El pago con {{ rechazo.medioPago }} fue rechazado ({{ rechazo.motivoRechazo }}). Elige otro medio.
+                    </div>
+                  }
+                  <p class="form-label mb-2">¿Cómo quieres pagar?</p>
+                  @for (m of mediosDePago; track m.valor) {
+                    <div class="form-check">
+                      <input class="form-check-input" type="radio" formControlName="medioPago"
+                             [id]="p.id + m.valor" [value]="m.valor"
+                             [class.is-invalid]="formularioPago.controls.medioPago.touched && formularioPago.controls.medioPago.invalid" />
+                      <label class="form-check-label" [for]="p.id + m.valor">
+                        <i class="fa-solid {{ m.icono }} me-1 text-body-secondary"></i>{{ m.texto }}
+                      </label>
+                    </div>
+                  }
+                  @if (formularioPago.controls.medioPago.touched && formularioPago.controls.medioPago.invalid) {
+                    <div class="text-danger small">Elige un medio de pago.</div>
+                  }
+                  <p class="small text-body-secondary mt-2 mb-3">
+                    Pago simulado: la pasarela responde al instante, sin datos de tarjeta reales.
+                  </p>
+                  <!-- El botón se apaga mientras se envía -->
+                  <button type="submit" class="btn btn-primary w-100" [disabled]="enviando()">
+                    @if (enviando()) {
+                      <span class="spinner-border spinner-border-sm me-2" aria-hidden="true"></span>Procesando pago...
+                    } @else {
+                      Pagar {{ p.total | currency: 'COP' : 'symbol-narrow' : '1.0-0' }}
+                    }
+                  </button>
+                </form>
+              }
+            </div>
+          </article>
+        </div>
+      }
+    </div>
+  }
+</section>

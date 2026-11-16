@@ -1,0 +1,67 @@
+<!-- navbar-expand-lg: en pantallas pequeñas el menú se recoge en el botón hamburguesa -->
+<nav class="navbar navbar-expand-lg bg-white border-bottom shadow-sm sticky-top">
+  <div class="container">
+    <a routerLink="/" class="navbar-brand marca">Glow Shop <span>✦</span></a>
+
+    <button class="navbar-toggler" type="button"
+            data-bs-toggle="collapse" data-bs-target="#menuPrincipal"
+            aria-controls="menuPrincipal" aria-expanded="false" aria-label="Abrir el menú">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="menuPrincipal">
+      <ul class="navbar-nav mx-auto gap-lg-4">
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/" routerLinkActive="active"
+             [routerLinkActiveOptions]="{ exact: true }">
+            <i class="fa-solid fa-house me-1"></i>Inicio
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/catalogo" routerLinkActive="active">
+            <i class="fa-solid fa-store me-1"></i>Catálogo
+          </a>
+        </li>
+        @if (auth.esCliente()) {
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/pedidos" routerLinkActive="active">
+              <i class="fa-solid fa-receipt me-1"></i>Mis pedidos
+            </a>
+          </li>
+        }
+        @if (auth.esVendedor()) {
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/vendedor" routerLinkActive="active">
+              <i class="fa-solid fa-shop me-1"></i>Mi panel
+            </a>
+          </li>
+        }
+      </ul>
+
+      <div class="d-flex flex-column flex-lg-row align-items-lg-center gap-2 gap-lg-3 pb-3 pb-lg-0">
+        @if (auth.esCliente()) {
+          <a routerLink="/carrito" class="carrito position-relative" aria-label="Ver mi carrito">
+            <i class="fa-solid fa-bag-shopping"></i>
+            @if (carrito.cantidadTotal() > 0) {
+              <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-primary">
+                {{ carrito.cantidadTotal() }}
+              </span>
+            }
+          </a>
+        }
+
+        @if (auth.usuario(); as usuario) {
+          <span class="saludo">Hola, {{ usuario.nombre.split(' ')[0] }}</span>
+          <button type="button" class="btn btn-outline-primary btn-sm" (click)="cerrarSesion()">
+            <i class="fa-solid fa-right-from-bracket me-1"></i>Cerrar sesión
+          </button>
+        } @else {
+          <a routerLink="/login" class="btn btn-outline-primary btn-sm">
+            <i class="fa-solid fa-right-to-bracket me-1"></i>Iniciar sesión
+          </a>
+          <a routerLink="/registro" class="btn btn-primary btn-sm">Registrarse</a>
+        }
+      </div>
+    </div>
+  </div>
+</nav>

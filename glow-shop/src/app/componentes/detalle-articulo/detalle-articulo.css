@@ -1,0 +1,50 @@
+/* Lo propio de Glow Shop: el "envase" del producto y las estrellas. */
+
+.imagen {
+  height: 260px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.imagen.rosa { background: #f5dce2; }
+.imagen.lila { background: #e9e0f0; }
+.imagen.beige { background: #f2e5d5; }
+.imagen.menta { background: #e0ece3; }
+
+.envase {
+  width: 100px;
+  height: 145px;
+  display: grid;
+  place-items: center;
+  border: 2px solid #ffffffaa;
+  border-radius: 15px 15px 25px 25px;
+  background: linear-gradient(130deg, #fff9f7, #e9c6cc);
+  color: #a76c7c;
+  font-size: 13px;
+  letter-spacing: 2px;
+  box-shadow: 0 12px 25px #6e465022;
+}
+
+.marca {
+  color: var(--glow-rosa);
+  font-size: 11px;
+  font-weight: bold;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.detalle {
+  background: #fbf0f1;
+  color: #8e5a6f;
+  font-weight: normal;
+}
+
+.estrellas {
+  color: var(--glow-dorado);
+}
+
+.estrella {
+  color: var(--glow-dorado);
+  text-decoration: none;
+}

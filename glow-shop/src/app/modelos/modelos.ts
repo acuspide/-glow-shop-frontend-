@@ -90,3 +90,10 @@ export interface Pedido {
   subtotal: number;
   total: number;
 }
+
+// Espejo de ArticuloVentas (GET /api/reportes/articulos-mas-vendidos)
+export interface ArticuloVentas {
+  articuloId: string;
+  nombre: string;
+  unidadesVendidas: number;
+}

@@ -1,3 +1,5 @@
-// Direccion base del backend de Spring Boot.
-// Si algun di�a se despliega, solo se cambia esta linea.
-export const API_URL = 'http://localhost:8080/api';
+import { environment } from '../../environments/environment';
+
+// Dirección base del backend. Sale de las variables de entorno (src/environments):
+// environment.ts en desarrollo y environment.prod.ts en producción.
+export const API_URL = environment.apiUrl;

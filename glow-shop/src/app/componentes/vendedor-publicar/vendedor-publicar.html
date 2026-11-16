@@ -1,0 +1,105 @@
+@if (sinTienda()) {
+  <div class="alert alert-warning">
+    Todavía no tienes una tienda. Regístrala en la pestaña "Mi tienda" para poder publicar.
+  </div>
+} @else {
+  @if (tienda()?.estado === 'PENDIENTE') {
+    <div class="alert alert-info">
+      Tu tienda <strong>{{ tienda()?.nombre }}</strong> está pendiente de aprobación:
+      el administrador debe aprobarla antes de que puedas publicar.
+    </div>
+  }
+  @if (error()) {
+    <div class="alert alert-danger" role="alert">{{ error() }}</div>
+  }
+
+  <!-- Formulario reactivo: valida en Angular y el backend vuelve a validar -->
+  <form class="card border-0 shadow-sm p-4" [formGroup]="formulario" (ngSubmit)="publicar()" novalidate>
+    <div class="row g-3">
+      <div class="col-md-8">
+        <label for="nombre" class="form-label">Nombre del artículo</label>
+        <input id="nombre" class="form-control" formControlName="nombre" placeholder="Labial mate Rosé"
+               [class.is-invalid]="malo('nombre')" />
+        <div class="invalid-feedback">Escribe el nombre (mínimo 3 letras).</div>
+      </div>
+
+      <div class="col-md-4">
+        <label for="precio" class="form-label">Precio (COP)</label>
+        <input id="precio" type="number" min="1" class="form-control" formControlName="precio"
+               [class.is-invalid]="malo('precio')" />
+        <div class="invalid-feedback">El precio debe ser mayor que cero.</div>
+      </div>
+
+      <div class="col-md-6">
+        <label for="categoria" class="form-label">Categoría</label>
+        <select id="categoria" class="form-select" formControlName="categoriaId" [class.is-invalid]="malo('categoriaId')">
+          <option value="">Elige una categoría</option>
+          @for (c of categorias(); track c.id) {
+            <option [value]="c.id">{{ c.nombre }}</option>
+          }
+        </select>
+        <div class="invalid-feedback">Elige una categoría.</div>
+      </div>
+
+      <div class="col-md-6">
+        <label for="marca" class="form-label">Marca</label>
+        <select id="marca" class="form-select" formControlName="marcaId" [class.is-invalid]="malo('marcaId')">
+          <option value="">Elige una marca</option>
+          @for (m of marcas(); track m.id) {
+            <option [value]="m.id">{{ m.nombre }}</option>
+          }
+        </select>
+        <div class="invalid-feedback">Elige una marca.</div>
+      </div>
+
+      <div class="col-md-4">
+        <label for="tono" class="form-label">Tono</label>
+        <select id="tono" class="form-select" formControlName="tono" [class.is-invalid]="malo('tono')">
+          <option value="">Elige un tono</option>
+          @for (t of tonos; track t) {
+            <option [value]="t">{{ t }}</option>
+          }
+        </select>
+        <div class="invalid-feedback">Elige un tono.</div>
+      </div>
+
+      <div class="col-md-4">
+        <label for="cantidad" class="form-label">Unidades disponibles</label>
+        <input id="cantidad" type="number" min="0" class="form-control" formControlName="cantidadDisponible"
+               [class.is-invalid]="malo('cantidadDisponible')" />
+        <div class="invalid-feedback">No puede ser negativo.</div>
+      </div>
+
+      <div class="col-md-4">
+        <label for="vencimiento" class="form-label">Fecha de vencimiento</label>
+        <input id="vencimiento" type="date" class="form-control" formControlName="fechaVencimiento"
+               [class.is-invalid]="malo('fechaVencimiento')" />
+        <div class="invalid-feedback">Debe ser una fecha posterior a hoy.</div>
+      </div>
+
+      <div class="col-12">
+        <span class="form-label d-block">Tipos de piel</span>
+        @for (tipo of tiposPielDisponibles; track tipo) {
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="checkbox" [id]="'piel-' + tipo"
+                   [checked]="marcado(tipo)" (change)="alternarTipoPiel(tipo)"
+                   [class.is-invalid]="malo('tiposPiel')" />
+            <label class="form-check-label" [for]="'piel-' + tipo">{{ tipo }}</label>
+          </div>
+        }
+        @if (malo('tiposPiel')) {
+          <div class="text-danger small mt-1">Marca al menos un tipo de piel.</div>
+        }
+      </div>
+    </div>
+
+    <!-- El botón se apaga mientras se envía -->
+    <button type="submit" class="btn btn-primary mt-4 align-self-start" [disabled]="enviando() || !tienda()">
+      @if (enviando()) {
+        <span class="spinner-border spinner-border-sm me-2" aria-hidden="true"></span>Publicando...
+      } @else {
+        <i class="fa-solid fa-upload me-1"></i>Publicar artículo
+      }
+    </button>
+  </form>
+}

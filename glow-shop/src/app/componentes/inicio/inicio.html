@@ -64,34 +64,17 @@
       <p>Todo para cuidar de ti, en un solo lugar.</p>
     </div>
 
-    <div class="categorias-grid">
-
-      <a routerLink="/catalogo" class="categoria">
-        <div class="categoria-icono facial">✿</div>
-        <h3>Cuidado facial</h3>
-        <p>Cuida y consiente tu piel</p>
-      </a>
-
-      <a routerLink="/catalogo" class="categoria">
-        <div class="categoria-icono maquillaje">♡</div>
-        <h3>Maquillaje</h3>
-        <p>Resalta tu belleza</p>
-      </a>
-
-      <a routerLink="/catalogo" class="categoria">
-        <div class="categoria-icono capilar">❀</div>
-        <h3>Cuidado capilar</h3>
-        <p>Cabello sano y radiante</p>
-      </a>
-
-      <a routerLink="/catalogo" class="categoria">
-        <div class="categoria-icono corporal">✧</div>
-        <h3>Cuidado corporal</h3>
-        <p>Un momento para ti</p>
-      </a>
-
+    <!-- Cada categoría sale del backend; al hacer clic abre el catálogo ya filtrado -->
+    <div class="row row-cols-2 row-cols-md-3 row-cols-lg-5 g-3">
+      @for (c of categorias(); track c.id; let i = $index) {
+        <div class="col">
+          <a routerLink="/catalogo" [queryParams]="{ categoria: c.id }" class="categoria h-100">
+            <div class="categoria-icono" [class]="claseColor(c.nombre)">{{ simbolo(i) }}</div>
+            <h3 class="h5 mt-3 mb-0">{{ c.nombre }}</h3>
+          </a>
+        </div>
+      }
     </div>
-
   </section>
 
   <!-- PRODUCTOS DESTACADOS -->
@@ -103,44 +86,22 @@
       <p>Productos que pueden convertirse en tus nuevos imprescindibles.</p>
     </div>
 
+    <!-- Los 3 más vendidos según el backend; al hacer clic se buscan en el catálogo -->
     <div class="productos-grid">
-
-      <article class="producto">
-        <div class="producto-imagen producto-rosa">
-          <span>♡</span>
-          <div class="producto-envase">GLOW</div>
-        </div>
-        <div class="producto-info">
-          <small>CUIDADO FACIAL</small>
-          <h3>Esenciales para tu piel</h3>
-          <p>Descubre tu próxima rutina favorita.</p>
-        </div>
-      </article>
-
-      <article class="producto">
-        <div class="producto-imagen producto-lila">
-          <span>♡</span>
-          <div class="producto-envase">BEAUTY</div>
-        </div>
-        <div class="producto-info">
-          <small>MAQUILLAJE</small>
-          <h3>Tu toque de color</h3>
-          <p>Exprésate a través del maquillaje.</p>
-        </div>
-      </article>
-
-      <article class="producto">
-        <div class="producto-imagen producto-beige">
-          <span>♡</span>
-          <div class="producto-envase">PURE</div>
-        </div>
-        <div class="producto-info">
-          <small>CUIDADO PERSONAL</small>
-          <h3>Momentos para ti</h3>
-          <p>Haz de tu cuidado un ritual especial.</p>
-        </div>
-      </article>
-
+      @for (f of favoritos(); track f.articuloId; let i = $index) {
+        <a class="producto" routerLink="/catalogo" [queryParams]="{ texto: f.nombre }">
+          <div class="producto-imagen" [class]="'producto-' + claseColor(f.nombre)">
+            <span>{{ i + 1 }}</span>
+            <div class="producto-envase">{{ etiquetaEnvase(f.nombre) }}</div>
+          </div>
+          <div class="producto-info">
+            <small>{{ f.unidadesVendidas }} {{ f.unidadesVendidas === 1 ? 'VENDIDO' : 'VENDIDOS' }}</small>
+            <h3>{{ f.nombre }}</h3>
+          </div>
+        </a>
+      } @empty {
+        <p class="text-center text-body-secondary">Todavía no hay ventas para mostrar.</p>
+      }
     </div>
 
     <div class="catalogo-boton">
