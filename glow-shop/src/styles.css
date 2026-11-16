@@ -1,1 +1,54 @@
-/* You can add global styles to this file, and also import other style files */
+/*
+ * Estilos globales de Glow Shop.
+ * Bootstrap ya viene cargado desde angular.json; aquí solo cambiamos sus variables
+ * para que los botones, enlaces y formularios usen los colores de la marca.
+ */
+:root {
+  --glow-rosa: #bd7188;
+  --glow-rosa-oscuro: #a95d75;
+  --glow-dorado: #d8a66c;
+  --glow-texto: #493b3d;
+  --glow-fondo: #fcf8f5;
+
+  --bs-body-color: var(--glow-texto);
+  --bs-body-bg: var(--glow-fondo);
+  --bs-body-font-family: Georgia, serif;
+
+  --bs-primary: #bd7188;
+  --bs-primary-rgb: 189, 113, 136;
+  --bs-link-color: #bd7188;
+  --bs-link-color-rgb: 189, 113, 136;
+  --bs-link-hover-color: #a95d75;
+  --bs-link-hover-color-rgb: 169, 93, 117;
+}
+
+.btn {
+  border-radius: 30px;
+}
+
+.btn-primary {
+  --bs-btn-bg: #bd7188;
+  --bs-btn-border-color: #bd7188;
+  --bs-btn-hover-bg: #a95d75;
+  --bs-btn-hover-border-color: #a95d75;
+  --bs-btn-active-bg: #a95d75;
+  --bs-btn-active-border-color: #a95d75;
+  --bs-btn-disabled-bg: #bd7188;
+  --bs-btn-disabled-border-color: #bd7188;
+}
+
+.btn-outline-primary {
+  --bs-btn-color: #bd7188;
+  --bs-btn-border-color: #bd7188;
+  --bs-btn-hover-color: #fff;
+  --bs-btn-hover-bg: #bd7188;
+  --bs-btn-hover-border-color: #bd7188;
+  --bs-btn-active-bg: #a95d75;
+  --bs-btn-active-border-color: #a95d75;
+}
+
+.form-control:focus,
+.form-select:focus {
+  border-color: #d9a3b3;
+  box-shadow: 0 0 0 0.2rem rgba(189, 113, 136, 0.25);
+}
