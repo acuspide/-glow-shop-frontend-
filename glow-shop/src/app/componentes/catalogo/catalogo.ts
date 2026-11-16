@@ -60,6 +60,8 @@ export class Catalogo implements OnInit {
   ngOnInit(): void {
     // Si viene desde el inicio con ?categoria=..., el catálogo arranca filtrado por esa categoría.
     this.categoriaId.set(this.route.snapshot.queryParamMap.get('categoria') ?? '');
+    // Si viene desde "Nuestros favoritos" con ?texto=..., arranca con esa búsqueda.
+    this.texto.set(this.route.snapshot.queryParamMap.get('texto') ?? '');
     this.cargarCategorias();
     this.buscar(0);
   }
