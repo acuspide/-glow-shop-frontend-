@@ -54,3 +54,13 @@
   border-color: #d9a3b3;
   box-shadow: 0 0 0 0.2rem rgba(189, 113, 136, 0.25);
 }
+
+.form-check-input:checked {
+  background-color: #bd7188;
+  border-color: #bd7188;
+}
+
+.form-check-input:focus {
+  border-color: #d9a3b3;
+  box-shadow: 0 0 0 0.2rem rgba(189, 113, 136, 0.25);
+}
