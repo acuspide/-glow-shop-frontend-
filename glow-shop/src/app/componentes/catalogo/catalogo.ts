@@ -1,4 +1,5 @@
 import { Component, OnInit, computed, inject, signal } from '@angular/core';
+import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
 import { CurrencyPipe } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -7,13 +8,18 @@ import { AuthService } from '../../servicios/auth';
 import { CarritoService } from '../../servicios/carrito';
 import { CategoriaService } from '../../servicios/categoria';
 import { NotificacionesService } from '../../servicios/notificaciones';
-import { Articulo, Pagina } from '../../modelos/modelos';
+import { Articulo, FiltrosBusqueda, Pagina } from '../../modelos/modelos';
 import { Categoria } from '../../modelos/vendedor';
+import { Subject, catchError, debounceTime, distinctUntilChanged, of, switchMap, tap } from 'rxjs';
+
 import { mensajeDeError } from '../../core/errores';
 import { claseColor, etiquetaEnvase } from '../../utilidades/visual';
 
 /** Cuántos productos se piden al backend en cada página. */
 const TAMANO_PAGINA = 6;
+
+/** Espera después de la última tecla antes de buscar (para no pedir en cada tecla). */
+const ESPERA_BUSQUEDA_MS = 400;
 
 @Component({
   selector: 'app-catalogo',
@@ -53,9 +59,57 @@ export class Catalogo implements OnInit {
   protected readonly paginaActual = computed(() => this.resultado()?.number ?? 0);
   protected readonly totalPaginas = computed(() => this.resultado()?.totalPages ?? 0);
 
+  /** Los cuatro filtros combinados en una sola señal: si cambia cualquiera, cambia esta. */
+  private readonly filtros = computed<FiltrosBusqueda>(() => ({
+    texto: this.texto(),
+    categoriaId: this.categoriaId(),
+    tono: this.tono(),
+    tipoPiel: this.tipoPiel(),
+  }));
+
+  /** Cada número que entra aquí es una página que hay que pedirle al backend. */
+  private readonly paginaPedida = new Subject<number>();
+
   protected readonly hayFiltros = computed(
     () => !!(this.texto() || this.categoriaId() || this.tono() || this.tipoPiel()),
   );
+
+  constructor() {
+    // Búsqueda reactiva: cuando cambian los filtros (por ejemplo al escribir), se espera
+    // 400 ms sin cambios y se pide la página 0. Así no se hace una petición por cada tecla.
+    toObservable(this.filtros)
+      .pipe(
+        debounceTime(ESPERA_BUSQUEDA_MS),
+        distinctUntilChanged((a, b) => JSON.stringify(a) === JSON.stringify(b)),
+        takeUntilDestroyed(),
+      )
+      .subscribe(() => this.paginaPedida.next(0));
+
+    // switchMap: si llega una búsqueda nueva mientras la anterior no ha respondido,
+    // se cancela la anterior para que una respuesta vieja no pise a la nueva.
+    this.paginaPedida
+      .pipe(
+        tap(() => {
+          this.cargando.set(true);
+          this.error.set('');
+        }),
+        switchMap((pagina) =>
+          this.articuloService.buscar(this.filtros(), pagina, TAMANO_PAGINA).pipe(
+            catchError((e) => {
+              this.error.set(mensajeDeError(e));
+              return of(null);
+            }),
+          ),
+        ),
+        takeUntilDestroyed(),
+      )
+      .subscribe((respuesta) => {
+        if (respuesta) {
+          this.resultado.set(respuesta);
+        }
+        this.cargando.set(false);
+      });
+  }
 
   ngOnInit(): void {
     // Si viene desde el inicio con ?categoria=..., el catálogo arranca filtrado por esa categoría.
@@ -63,7 +117,6 @@ export class Catalogo implements OnInit {
     // Si viene desde "Nuestros favoritos" con ?texto=..., arranca con esa búsqueda.
     this.texto.set(this.route.snapshot.queryParamMap.get('texto') ?? '');
     this.cargarCategorias();
-    this.buscar(0);
   }
 
   /** GET /api/categorias: los botones de categoría salen del backend. */
@@ -76,31 +129,9 @@ export class Catalogo implements OnInit {
     });
   }
 
+  /** Pide una página al backend con los filtros actuales (paginación y "Intentar de nuevo"). */
   protected buscar(pagina = 0): void {
-    this.cargando.set(true);
-    this.error.set('');
-
-    this.articuloService
-      .buscar(
-        {
-          texto: this.texto(),
-          categoriaId: this.categoriaId(),
-          tono: this.tono(),
-          tipoPiel: this.tipoPiel(),
-        },
-        pagina,
-        TAMANO_PAGINA,
-      )
-      .subscribe({
-        next: (respuesta) => {
-          this.resultado.set(respuesta);
-          this.cargando.set(false);
-        },
-        error: (e) => {
-          this.error.set(mensajeDeError(e));
-          this.cargando.set(false);
-        },
-      });
+    this.paginaPedida.next(pagina);
   }
 
   protected cambiarTexto(evento: Event): void {
@@ -109,17 +140,14 @@ export class Catalogo implements OnInit {
 
   protected elegirCategoria(id: string): void {
     this.categoriaId.set(id);
-    this.buscar(0);
   }
 
   protected elegirTono(evento: Event): void {
     this.tono.set((evento.target as HTMLSelectElement).value);
-    this.buscar(0);
   }
 
   protected elegirTipoPiel(evento: Event): void {
     this.tipoPiel.set((evento.target as HTMLSelectElement).value);
-    this.buscar(0);
   }
 
   protected limpiarFiltros(): void {
@@ -127,7 +155,6 @@ export class Catalogo implements OnInit {
     this.categoriaId.set('');
     this.tono.set('');
     this.tipoPiel.set('');
-    this.buscar(0);
   }
 
   protected irAPagina(pagina: number): void {

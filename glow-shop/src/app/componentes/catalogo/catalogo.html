@@ -8,15 +8,14 @@
   <!-- BÚSQUEDA Y FILTROS: la búsqueda la hace el backend con la consulta JPQL -->
   <div class="card border-0 shadow-sm mb-3">
     <div class="card-body row g-2 align-items-center">
-      <form class="col-12 col-lg-6" (submit)="$event.preventDefault(); buscar(0)">
+      <!-- Búsqueda reactiva: busca sola mientras se escribe (ver constructor en catalogo.ts) -->
+      <div class="col-12 col-lg-6">
         <div class="input-group">
-          <input type="search" class="form-control" placeholder="Buscar productos..."
+          <span class="input-group-text bg-white"><i class="fa-solid fa-magnifying-glass text-body-secondary"></i></span>
+          <input type="search" class="form-control" placeholder="Escribe para buscar productos..."
                  aria-label="Buscar productos" [value]="texto()" (input)="cambiarTexto($event)" />
-          <button type="submit" class="btn btn-primary">
-            <i class="fa-solid fa-magnifying-glass me-1"></i>Buscar
-          </button>
         </div>
-      </form>
+      </div>
 
       <div class="col-6 col-lg-3">
         <select class="form-select" aria-label="Filtrar por tono" (change)="elegirTono($event)">
@@ -57,7 +56,7 @@
       <div class="alert alert-danger d-inline-block">{{ error() }}</div>
       <div><button type="button" class="btn btn-outline-primary" (click)="buscar(0)">Intentar de nuevo</button></div>
     </div>
-  } @else if (cargando()) {
+  } @else if (cargando() && !resultado()) {
     <div class="text-center py-5" aria-busy="true">
       <div class="spinner-border text-primary" role="status">
         <span class="visually-hidden">Cargando...</span>
@@ -84,7 +83,7 @@
       </p>
 
       <!-- Cuadrícula: 1 columna en celular, 2 en tablet y 3 en computador -->
-      <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 g-4">
+      <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 g-4" [class.opacity-50]="cargando()">
         @for (a of resultado()?.content; track a.id) {
           <div class="col">
             <article class="card h-100 border-0 shadow-sm tarjeta">
