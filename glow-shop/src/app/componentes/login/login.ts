@@ -46,7 +46,8 @@ export class Login {
         this.router.navigateByUrl(destino && destino.startsWith('/') ? destino : '/catalogo');
       },
       error: (e) => {
-        this.error.set(mensajeDeError(e));
+        // En el login un 401 no es "sesión vencida": es correo o contraseña equivocados.
+        this.error.set(e.status === 401 ? 'El correo o la contraseña no son correctos.' : mensajeDeError(e));
         this.enviando.set(false);
       },
     });

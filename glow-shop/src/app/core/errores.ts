@@ -1,21 +1,32 @@
 import { HttpErrorResponse } from '@angular/common/http';
 
+/** Lo que significa cada código HTTP, dicho para una persona. */
+const MENSAJES_POR_CODIGO: Record<number, string> = {
+  0: 'No pudimos conectar con el servidor. Verifica que el backend esté encendido.',
+  400: 'Revisa los datos.',
+  401: 'Inicia sesión para continuar.',
+  403: 'No tienes permiso para hacer esto.',
+  404: 'Lo que buscas no existe.',
+  409: 'Eso ya existe.',
+  422: 'No se pudo completar la operación.',
+  500: 'Ocurrió un error en el servidor. Inténtalo más tarde.',
+};
+
+const MENSAJE_GENERAL = 'Ocurrió un error inesperado. Inténtalo de nuevo.';
+
 /**
- * Convierte un error HTTP en un mensaje amigable.
- * El backend responde errores como { timestamp, status, mensaje }.
+ * Convierte un error HTTP en un mensaje que una persona entienda:
+ * primero lo que significa el código (400 "revisa los datos", 404 "no existe"...)
+ * y después el detalle que manda el backend en { status, mensaje, timestamp }.
+ * Ejemplo 422: "No se pudo completar la operación. La tienda no está activa."
  */
 export function mensajeDeError(error: unknown): string {
-  if (error instanceof HttpErrorResponse) {
-    if (error.status === 0) {
-      return 'No pudimos conectar con el servidor. Verifica que el backend esté encendido.';
-    }
-    const mensaje = (error.error as { mensaje?: string } | null)?.mensaje;
-    if (mensaje) {
-      return mensaje;
-    }
-    if (error.status === 401) {
-      return 'Debes iniciar sesión para continuar.';
-    }
+  if (!(error instanceof HttpErrorResponse)) {
+    return MENSAJE_GENERAL;
   }
-  return 'Ocurrió un error inesperado. Inténtalo de nuevo.';
+
+  const significado = MENSAJES_POR_CODIGO[error.status] ?? MENSAJE_GENERAL;
+  const detalle = (error.error as { mensaje?: string } | null)?.mensaje;
+
+  return detalle && error.status !== 0 ? `${significado} ${detalle}` : significado;
 }
