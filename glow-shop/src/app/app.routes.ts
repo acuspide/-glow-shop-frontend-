@@ -9,6 +9,7 @@ import { authGuard, invitadoGuard } from './core/auth-guard';
 import { PanelVendedor } from './componentes/panel-vendedor/panel-vendedor';
 import { rolGuard } from './core/rol-guard';
 import { MisPedidos } from './componentes/mis-pedidos/mis-pedidos';
+import { DetalleArticulo } from './componentes/detalle-articulo/detalle-articulo';
 
 
 export const routes: Routes = [
@@ -27,6 +28,9 @@ export const routes: Routes = [
         path: 'catalogo',
         component: Catalogo
     },
+    // Detalle de un articulo con sus calificaciones (publico).
+    { path: 'articulo/:id',
+        component: DetalleArticulo },
     // El carrito solo se puede ver con sesion iniciada.
     { path: 'carrito',
         component: Carrito, canActivate: [authGuard] },

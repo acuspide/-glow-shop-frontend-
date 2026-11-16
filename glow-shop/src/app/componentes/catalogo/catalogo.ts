@@ -1,7 +1,7 @@
 import { Component, OnInit, computed, inject, signal } from '@angular/core';
 import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
 import { CurrencyPipe } from '@angular/common';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 
 import { ArticuloService } from '../../servicios/articulo';
 import { AuthService } from '../../servicios/auth';
@@ -23,7 +23,7 @@ const ESPERA_BUSQUEDA_MS = 400;
 
 @Component({
   selector: 'app-catalogo',
-  imports: [CurrencyPipe],
+  imports: [CurrencyPipe, RouterLink],
   templateUrl: './catalogo.html',
   styleUrl: './catalogo.css',
 })
