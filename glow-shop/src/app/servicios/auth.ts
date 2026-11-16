@@ -40,7 +40,7 @@ export class AuthService {
       this.borrarSesion();
       this.router.navigateByUrl('/');
     };
-    // Avisamos al backend; si falla (token vencido, etc.) igual cerramos la sesion aqui�.
+    // Avisamos al backend; si falla (token vencido, etc.) igual cerramos la sesión aquí.
     this.http.post<void>(`${API_URL}/auth/logout`, {}).subscribe({ next: terminar, error: terminar });
   }
 
