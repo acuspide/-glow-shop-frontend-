@@ -26,7 +26,11 @@
         Total: <strong>{{ totalPedidos() | currency: 'COP' : 'symbol-narrow' : '1.0-0' }}</strong>
       </p>
 
-      <a routerLink="/catalogo" class="btn">Seguir comprando</a>
+      <!-- Siguiente paso: pagar en "Mis pedidos" (pago simulado) -->
+      <div class="d-flex flex-wrap justify-content-center gap-2">
+        <a routerLink="/pedidos" class="btn btn-primary"><i class="fa-solid fa-lock me-1"></i>Pagar mis pedidos</a>
+        <a routerLink="/catalogo" class="btn btn-outline-primary">Seguir comprando</a>
+      </div>
     </div>
   } @else {
     <div class="encabezado-pagina">
